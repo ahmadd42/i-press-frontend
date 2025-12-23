@@ -109,7 +109,7 @@ async function handleSignup(event) {
   };
 
   try {
-    const res = await fetch("http://192.168.100.99:3000/files/adduser", {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/adduser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

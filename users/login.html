@@ -90,7 +90,7 @@ async function handleLogin(event) {
   const errorMsg = document.getElementById("errorMsg");
 
   try {
-    const res = await fetch("http://192.168.100.99:3000/files/login", {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

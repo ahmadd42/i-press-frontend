@@ -103,7 +103,7 @@ async function fetchFeeds() {
   const container = document.getElementById('doc-panel');
   try {
     //const response = await fetch("http://localhost:3000/files/getfeeds", {
-    const response = await fetch("http://192.168.100.99:3000/files/getfeeds", {      
+    const response = await fetch("https://i-press-backend-production.up.railway.app/files/getfeeds", {      
     method: "POST",
       });
 
@@ -117,13 +117,13 @@ async function fetchFeeds() {
     const elapsedTime = getElapsedTime(record.SharedOn);
     const isTruncated = record.Description.length > 150;
     const shortText = record.Description.slice(0, 150);
-    const conURL = `http://192.168.100.99:3000/files/getContent/${record.ContentID}${record.Extension}`
+    const conURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}${record.Extension}`
 
   const div = document.createElement('div');
   div.className = (screen === "big") ? 'doc-item' : 'doc-item-mobile';
   var HTMLString = '';
           if(record.Extension === ".pdf") {
-          const prevURL = `http://192.168.100.99:3000/files/getContent/${record.ContentID}.jpg`;
+          const prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}.jpg`;
           HTMLString += (screen === "big") 
                         ? `<div class="doc-img"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon bg-img-setting" style="background-image: url('${prevURL}');"></div>` 
                         : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon-mobile bg-img-setting" style="background-image: url('${prevURL}');"></div>`;
@@ -134,7 +134,7 @@ async function fetchFeeds() {
                               : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">Image</p></div><div class="content-icon-mobile bg-img-setting" style="background-image: url('${conURL}');"></div>`;
           }
           else if(record.Extension === ".mp3" || record.Extension === ".mp4" || record.Extension === ".mpeg") {
-            const prevURL = `http://192.168.100.99:3000/files/getContent/${record.ContentID}${record.Extension}`;
+            const prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}${record.Extension}`;
             HTMLString += (screen === "big")
                           ? `<div class="video-prev-container"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><video class="video-prev" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video>`
                           : `<div class="video-prev-container-mobile"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><video class="video-prev-mobile" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video>`;  

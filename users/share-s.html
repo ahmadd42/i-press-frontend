@@ -165,7 +165,7 @@
   formData.append('file', file);
 
   try {
-  const response = await fetch('http://192.168.100.99:3000/files/upload', {
+  const response = await fetch('https://i-press-backend-production.up.railway.app/files/upload', {
   method: 'POST',
   body: formData,
 });
@@ -201,7 +201,7 @@ if(title.value === "" || desc.value === "" || author.value === "") {
   const author_inp = document.getElementById("author").value;
   const cat_inp = document.getElementById("cat").value;
 
-  const res = await fetch("http://192.168.100.99:3000/files/recordmetadata", {
+  const res = await fetch("https://i-press-backend-production.up.railway.app/files/recordmetadata", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

@@ -188,7 +188,7 @@ return viewer_html;
 
 async function fetchDocument() {  
 
-  fetch('http://192.168.100.99:3000/files/getbasicinfo', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getbasicinfo', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -206,7 +206,7 @@ const extension = data[0].ext;
 const dld_status = data[0].can_download;
 const uploader = data[0].uploader;
 const title = data[0].title;
-const docURL = `http://192.168.100.99:3000/files/getContent/${value}${extension}`
+const docURL = `https://i-press-backend-production.up.railway.app/files/getContent/${value}${extension}`
 document.getElementById("doc-view-panel").innerHTML = generateViewerHTML(docURL, extension, dld_status);
 //})
 document.getElementById("con_title").innerText = title;
@@ -222,7 +222,7 @@ async function fetchComments() {
   const container = document.getElementById("cmt_container");
   container.innerHTML = ``;
 
-  fetch('http://192.168.100.99:3000/files/getcomments', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getcomments', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -257,7 +257,7 @@ async function handlePost() {
   const user = localStorage.getItem("userId");
 
   try {
-    const res = await fetch("http://192.168.100.99:3000/files/postcomment", {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/postcomment", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -281,7 +281,7 @@ async function fetchLikes() {
 
   const like = document.getElementById("likes");
 
-  fetch('http://192.168.100.99:3000/files/getlikes', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getlikes', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -305,7 +305,7 @@ async function fetchDislikes() {
 
   const dislike = document.getElementById("dislikes");
 
-  fetch('http://192.168.100.99:3000/files/getdislikes', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getdislikes', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -338,7 +338,7 @@ async function fetchUserReaction() {
 
   const UserId = localStorage.getItem("userId");
 
-  fetch('http://192.168.100.99:3000/files/getuserreaction', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getuserreaction', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -419,7 +419,7 @@ async function handleLike() {
 
       if(op === "add" || op === "delete") {
 
-    const res = await fetch("http://192.168.100.99:3000/files/adddeletereaction", {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/adddeletereaction", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -455,7 +455,7 @@ async function handleDislike() {
 
       if(op === "add" || op === "delete") {
 
-    const res = await fetch("http://192.168.100.99:3000/files/adddeletereaction", {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/adddeletereaction", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

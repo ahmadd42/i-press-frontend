@@ -281,7 +281,7 @@ async function handleNext1() {
   formData.append('file', file);
 
   try {
-  const response = await fetch('http://localhost:3000/files/upload', {
+  const response = await fetch('https://i-press-backend-production.up.railway.app/files/upload', {
   method: 'POST',
   body: formData,
 });
@@ -321,7 +321,7 @@ async function handleShare() {
   } 
 
 
-    const res = await fetch("http://localhost:3000/files/recordmetadata", {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/recordmetadata", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -352,15 +352,15 @@ async function handleShare() {
       var prevURL = "";
 
           if(file_ext === "pdf") {
-          prevURL = `http://localhost:3000/files/getContent/${contID}.jpg`;
+          prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${contID}.jpg`;
           HTMLString = `<div class="preview-box bg-img-setting" style="background-image: url('${prevURL}');"></div>`;
           }
           else if(file_ext === "jpg" || file_ext === "jpeg" || file_ext === "gif" || file_ext === "png" || file_ext === "tiff") {
-              prevURL = `http://localhost:3000/files/getContent/${contID}.${file_ext}`;
+              prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${contID}.${file_ext}`;
                 HTMLString = `<div class="preview-box bg-img-setting" style="background-image: url('${prevURL}');"></div>`;
           }
           else if(record.Extension === "mp3" || record.Extension === "mp4" || record.Extension === "mpeg") {
-            prevURL = `http://localhost:3000/files/getContent/${contID}.${file_ext}`;
+            prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${contID}.${file_ext}`;
             HTMLString = `<video class="preview-box" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video>`;
           }
           //alert(HTMLString);
