@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="">
+
+  <link rel="stylesheet" href="../styling/landing-page.css">
+  <link rel="stylesheet" href="../styling/doc-view-page.css">
+  <link rel="stylesheet" href="../styling/landing-page-mobile.css">
+
+  <script>
+    function getElapsedTime(GivenDatetime) {
+      var msg = "";
+	const now = new Date();
+const givenDate = new Date(GivenDatetime);  // your given date-time
+
+const diffMs = now - givenDate;  // difference in milliseconds
+
+// Convert milliseconds to more useful units:
+const diffSeconds = Math.floor(diffMs / 1000);
+const diffMinutes = Math.floor(diffMs / (1000 * 60));
+const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+const diffMonths = Math.floor(diffMs / (1000 * 60 * 60 * 24 * 30));
+const diffYears = (diffMonths / 12).toFixed(1);
+
+if(diffMinutes <= 60) { msg = diffMinutes + " minute" + (diffMinutes > 1 ? "s" : "") + " ago"; }
+else if(diffHours <= 24) { msg = diffHours + " hour" + (diffHours > 1 ? "s" : "") + " ago"; }
+else if(diffDays <= 30) { msg = diffDays + " day" + (diffDays > 1 ? "s" : "") + " ago"; }
+else if(diffMonths <= 12) { msg = diffMonths + " month" + (diffMonths > 1 ? "s" : "") + " ago"; }
+else { msg = diffYears + " year" + (diffYears > 1 ? "s" : "") + " ago"; }
+
+return msg;
+
+    }
+
+  </script>
+
+  <title>IPress - The knowledge sharing platform</title>
+</head>
+<body>
+  
+<div id="main-view-container" class="content-and-reactions">
+</div>
+<script>
+
+  const screen = (window.innerWidth < 1000) ? "small" : "big";
+
+function loadTemplateAndContent() {
+  const con = document.getElementById("main-view-container");
+
+let template = (window.innerWidth < 1000)
+        ? "small-view.html"
+        : "big-view.html";
+if(window.innerWidth < 800) {        
+
+    fetch("small-view.html")
+        .then(res => res.text())
+        .then(html => {
+            con.innerHTML = html;   // Template is now in place
+            getSigninStatus();
+            fetchDocument();
+            fetchComments();
+            fetchLikes();
+            fetchDislikes();
+        });
+      }
+
+else {
+      fetch("big-view.html")
+        .then(res => res.text())
+        .then(html => {
+            con.innerHTML = html;   // Template is now in place
+            getSigninStatus();
+            fetchDocument();
+            fetchComments();
+            fetchLikes();
+            fetchDislikes();
+
+        });
+}
+}
+
+const params = new URLSearchParams(window.location.search);
+const value = params.get("id"); // replace with actual param name
+var basicInfo;
+var UserReaction = "";
+
+
+
+//document.getElementById("home_btn").onclick = () => {
+//window.location.href = "/i-press";
+//};
+
+function goShare() {
+  if(localStorage.getItem("userId"))  {
+    if(window.innerWidth < 800)
+      window.location.href = "/i-press/users/share-s.html";
+    else
+      window.location.href = "/i-press/users/share.html";
+  }
+}
+
+function getSigninStatus() {
+  const profile_area = document.getElementById("profile");
+  const display_name = localStorage.getItem("displayName");
+  const comm_panel = document.getElementById("comm_input");
+
+  if (display_name) {
+    profile_area.className = "me";
+    profile_area.innerHTML = `<button id="profile_btn">Me</button>`;
+    document.getElementById("disp_name").innerHTML = display_name;
+    comm_panel.innerHTML = `<label id="who"><b>${display_name}:</b></label>
+        <textarea class="comment-box" id="comment" name="user_comments" rows="1" cols="30" placeholder="Add a public comment"></textarea>
+        <button class="post-btn" onclick="handlePost()">Post</button>`;  
+  }
+  else {
+    profile_area.className = "signin";
+    profile_area.innerHTML = `<a href="../users/login.html">Sign in to get personalized feeds, and to upload and engage with the content</a>`;
+    comm_panel.innerHTML = "";
+  }
+          fetchUserReaction();
+}
+
+function disableIframeContextMenu() {
+        const iframe = document.getElementById("docViewer"); // Replace 'myIframe' with your iframe's ID
+        if (iframe && iframe.contentWindow && iframe.contentWindow.document) {
+            iframe.contentWindow.document.addEventListener("contextmenu", function(e) {
+                e.preventDefault(); // Prevent default context menu
+            }, false);
+        }
+    }
+    // Call this function after the iframe content has loaded
+    window.addEventListener("load", disableIframeContextMenu);
+
+function generateViewerHTML(path, ext, d_status) {
+var viewer_html = "";
+
+if(ext === ".pdf") {
+path += (d_status === 0) ? `#toolbar=0&navpanes=0&scrollbars=0` : '';
+viewer_html = `<iframe id="docViewer" class="doc-viewer pdf-frame" src="${path}" frameborder="0" oncontextmenu="return false"></iframe>`;
+if(d_status === 0) {
+  viewer_html += `<div id="overlay" 
+    style="position: absolute; left: 7%; top: 5%; width:76vw; height:93vh;"
+    oncontextmenu="return false" 
+    onmousedown="return false" 
+    onselectstart="return false"
+    >
+  </div>`;
+}
+}
+else if(ext === ".jpg" || ext === ".jpeg" || ext === ".gif" || ext === ".png" || ext === ".tiff") {
+
+viewer_html = `<div id="viewerContainer" style="margin-top:10px; padding-left: 1.5em; width:82%; 
+height:75%;"><img id="docViewer" src="${path}" style="width:100%;"`;
+
+viewer_html += (d_status === 0) ? ` oncontextmenu="return false"></div>` : `></div>`;
+}
+
+else if(ext === ".mp3" || ext === ".mp4" || ext === ".mpeg") {
+
+viewer_html = (screen === "small") ? `<video id="myVideo" width="90%" controls` : `<video id="myVideo" width="70%" controls`;
+viewer_html += (d_status === 0) ? ` controlsList="nodownload" oncontextmenu="return false"` : ``;  
+viewer_html += ` autoplay><source src="${path}" type="video/mp4"></video>`;
+}
+
+return viewer_html;
+}
+
+async function fetchDocument() {  
+
+  fetch('http://192.168.100.99:3000/files/getbasicinfo', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contentid: value
+  })
+})
+.then(response => (response.json())
+
+)
+.then(data => {
+//document.getElementById("doc-panel").innerHTML = data[0].ext + "    " + data[0].can_download;
+const extension = data[0].ext;
+const dld_status = data[0].can_download;
+const uploader = data[0].uploader;
+const title = data[0].title;
+const docURL = `http://192.168.100.99:3000/files/getContent/${value}${extension}`
+document.getElementById("doc-view-panel").innerHTML = generateViewerHTML(docURL, extension, dld_status);
+//})
+document.getElementById("con_title").innerText = title;
+document.getElementById("uploader").innerText = uploader;
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+}
+
+async function fetchComments() {
+
+  const container = document.getElementById("cmt_container");
+  container.innerHTML = ``;
+
+  fetch('http://192.168.100.99:3000/files/getcomments', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contentid: value
+  })
+})
+.then(response => (response.json())
+
+)
+.then(data => {
+  let length = data.length;
+  document.getElementById("com_heading").innerText = `${length} comments`
+  for(let item of data) {
+  container.innerHTML += `<p><b>${item.DisplayName}:</b> ${item.Comment}</p>`;
+  }
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+}
+
+function signOut() {
+  localStorage.clear();
+  getSigninStatus();
+}
+
+async function handlePost() {
+  //event.preventDefault(); // stop form from reloading the page
+  const commenttext = document.getElementById("comment").value;
+  const user = localStorage.getItem("userId");
+
+  try {
+    const res = await fetch("http://192.168.100.99:3000/files/postcomment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ userid: user, contid: value, comment: commenttext })
+    });
+
+    if (res.status === 200) {
+      document.getElementById("comment").value = ``;
+      fetchComments();
+    } else {
+      errorMsg.textContent = "Server error, try again later.";
+    }
+  } catch (err) {
+    console.error("Error in comment posting:", err);
+    errorMsg.textContent = "Network error.";
+  }
+}
+
+async function fetchLikes() {
+
+  const like = document.getElementById("likes");
+
+  fetch('http://192.168.100.99:3000/files/getlikes', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contentid: value
+  })
+})
+.then(response => (response.json())
+
+)
+.then(data => {
+like.innerText = data[0].likes;
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+}
+
+async function fetchDislikes() {
+
+  const dislike = document.getElementById("dislikes");
+
+  fetch('http://192.168.100.99:3000/files/getdislikes', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contentid: value
+  })
+})
+.then(response => (response.json())
+
+)
+.then(data => {
+dislike.innerText = data[0].dislikes;
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+}
+
+async function fetchUserReaction() {
+
+  const like_btn = document.getElementById("like_btn");
+  const dislike_btn = document.getElementById("dislike_btn");
+
+  like_btn.className = "react-btn like-black";
+  dislike_btn.className = "react-btn dislike-black";
+
+
+  if(localStorage.getItem("userId") !== null) {
+
+  const UserId = localStorage.getItem("userId");
+
+  fetch('http://192.168.100.99:3000/files/getuserreaction', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contentid: value,
+    userid: UserId
+  })
+})
+.then(response => (response.json())
+
+)
+.then(data => {
+if(data.length > 0) {
+UserReaction = data[0].reaction;
+if(UserReaction === "like") { like_btn.className = "react-btn like-blue"; }
+else if(UserReaction === "dislike") { dislike_btn.className = "react-btn dislike-blue"; }
+}
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+  }
+  else {
+    UserReaction = "";
+    like_btn.className = "react-btn like-black";
+    dislike_btn.className = "react-btn dislike-black";
+  }
+
+}
+
+window.onclick = function(event) {
+  const profile_area = document.getElementById("profile");
+  profile_btn = document.getElementById("profile_btn");
+  topmenu = document.getElementById("top-menu");
+  const menu_btn = document.getElementById("menu-btn");
+  const side_nav = document.getElementById("side-nav");
+
+  if(menu_btn && event.target === menu_btn) {
+//    if(side_nav.style.display === "none") side_nav.style.display = "block"; else side_nav.style.display = "none";
+side_nav.classList.toggle("active");
+  }
+  else if (event.target === profile_area || event.target === profile_btn ) {
+    topmenu.style.opacity = 1;
+  }
+  else if(topmenu.style.opacity == 1) {
+    topmenu.style.opacity = 0;
+  }
+};
+
+window.addEventListener("storage", function (event) {
+getSigninStatus();
+});
+
+function highlightButton(btn) {
+  if(localStorage.getItem("userId") !== null) {
+    btn.style.backgroundColor = "#e0e1e3";
+  }
+}
+
+function normalizeButton(btn) {
+  btn.style.backgroundColor = "#ffffff";
+}
+
+async function handleLike() {
+  var op = "";
+    if(localStorage.getItem("userId") !== null) {
+        
+    const user = localStorage.getItem("userId");
+
+      if(UserReaction === ""){
+        op = "add";
+      }
+      else if(UserReaction === "like") {
+        op = "delete";
+        UserReaction = "";
+      }
+
+      if(op === "add" || op === "delete") {
+
+    const res = await fetch("http://192.168.100.99:3000/files/adddeletereaction", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ userid: user, contentid: value, reaction: "like", operation: op })
+    });
+
+    if (res.status === 200) {
+      fetchUserReaction();
+      fetchLikes();
+
+    } else {
+      errorMsg.textContent = "Server error, try again later.";
+    }
+  }
+
+    }
+}
+
+async function handleDislike() {
+  var op = "";
+    if(localStorage.getItem("userId") !== null) {
+        
+    const user = localStorage.getItem("userId");
+
+      if(UserReaction === ""){
+        op = "add";
+      }
+      else if(UserReaction === "dislike") {
+        op = "delete";
+        UserReaction = "";
+      }
+
+      if(op === "add" || op === "delete") {
+
+    const res = await fetch("http://192.168.100.99:3000/files/adddeletereaction", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ userid: user, contentid: value, reaction: "dislike", operation: op })
+    });
+
+    if (res.status === 200) {
+      fetchUserReaction();
+      fetchDislikes();
+
+    } else {
+      errorMsg.textContent = "Server error, try again later.";
+    }
+  }
+
+    }
+}
+
+window.addEventListener("DOMContentLoaded", loadTemplateAndContent);
+document.body.style.overflow = '';
+
+</script>
+
+</body>
+</html>

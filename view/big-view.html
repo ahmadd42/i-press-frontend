@@ -1,0 +1,80 @@
+      <div id="top-menu" class="dropdown-content">
+        <p id="disp_name" class="disp-name" href="#"></p>
+        <a href="#">Account Settings</a>
+        <a href="#" onclick="signOut()">Logout</a>
+      </div>
+
+    <div class="nav-bar">
+      <div class="nav-bar-top"><button class="menu-btn nav-menu"></button></div>
+      <div class="navbar-item-container">
+      <div class="nav-bar-item"><button class="nav-btn nav-home"></button></div>
+      <div class="nav-bar-caption" id="home_btn">Home</div>
+      </div>
+      <div class="navbar-item-container">
+      <div class="nav-bar-item"><button class="nav-btn nav-trending"></button></div>
+      <div class="nav-bar-caption">Trending</div>
+      </div>
+      <div class="navbar-item-container">
+      <div class="nav-bar-item"><button class="nav-btn nav-follows"></button></div>
+      <div class="nav-bar-caption">Followings</div>
+      </div>
+      <div class="navbar-item-container">
+      <div class="nav-bar-item"><button class="nav-btn nav-pub"></button></div>
+      <div class="nav-bar-caption">Publications</div>
+      </div>
+    </div>
+
+
+    <div class="docview-top-bar">
+
+        <div class="tool-bar">
+        <div class="main-logo bg-img-setting"></div>
+        <div class="search-box">
+          <input type="text" placeholder="Search..." />
+          <button type="submit"></button>
+        </div>
+        <div class="voice-search"><button></button></div>
+        <div><button class="publish-btn" onclick="goShare()">Share</button></div>
+        <div id="profile"></div>
+        </div>
+<!--        <div class="cat-bar">
+          <button>All</button>
+          <button>Education</button>
+          <button>E-books</button>
+          <button>Technology</button>          
+          <button>History</button>
+          <button>Politics</button>
+          <button>Economy</button>
+          <button>Lifestyle</button>
+          <button>Sports</button>
+        </div>-->
+
+        </div>
+<div>
+    <div id="doc-view-panel" class="doc-view-container"><!--<h2>This is the document viewer page</h2>-->
+    <!--<iframe id="docViewer" class="doc-viewer" src="D:\i-Press\Node Backend\uploads\24ae41c098e0adf393693581a7b7984a.pdf" frameborder="0"></iframe>-->
+    </div>
+    <div class="reactions-panel">
+      <div class="title-container">
+      <span id="con_title" class="doc-title">9 Upwork proposal hooks</span>
+      <span id="likes" class="reaction" style="margin-left: 10em;">24</span>
+      <button id="like_btn" class="react-btn like-black" onmouseenter="highlightButton(this)" onmouseleave="normalizeButton(this)" onclick="handleLike()"></button>
+
+      <span id="dislikes" class="reaction" style="margin-left: 2em;">3</span>
+      <button id="dislike_btn" class="react-btn dislike-black" onmouseenter="highlightButton(this)" onmouseleave="normalizeButton(this)" onclick="handleDislike()"></button>
+
+      </div>
+      <p id="uploader" class="author-name">ahmadd42@gmail.com</p>
+      <div class="comment-heading">
+      <p id="com_heading" class="comment-heading">975 Comments</p>
+      </div>
+      <div id="comm_input" class="comment-input">
+      </div>
+            <div class="comt-container" id="cmt_container"></div>
+      <div>
+
+      </div> 
+    </div>
+</div>
+
+    <div class="ads-panel"></div>

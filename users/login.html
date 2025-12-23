@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="">
+
+  <link rel="stylesheet" href="../styling/login-page.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <title>IPress - User Login</title>
+  <script>
+  </script>
+</head>
+<body>
+<div id="con" class="container">
+<div id="logo" class="logo-panel">
+    <img src="../graphics/logo-large.jpg">
+</div>
+<div id="login" class="login-panel">
+
+<!--  <div class="center"> -->
+    <form class="card" id="loginForm" autocomplete="on">
+      <h1>Sign in to your account</h1>
+      <p class="lead">Enter your username and password to continue.</p>
+
+      <div style="margin-bottom:12px">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="text" inputmode="email" autocomplete="email" required placeholder="your email address">
+      </div>
+
+      <div style="margin-bottom:6px">
+        <label for="password">Password</label>
+        <div class="password-container">
+        <input class="pwd" id="password" name="password" type="password" autocomplete="current-password" required placeholder="••••••••">
+        <span class="password-toggle" id="togglePassword" onclick="togglePwdView()"><i id="pwd-toggle" class="fa fa-eye"></i></span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit">Sign in</button>
+      </div>
+
+      <p class="note">By signing in you agree to our terms of service.</p>
+      <p></p>
+      <p id="errorMsg" class="error"></p>
+    </form>
+<!--  </div> -->
+    <div class="signup-div">
+      <a href="/i-press">Back to Home</a>
+      <a href="signup.html">New user ? Sign Up to create your account</a>
+    </div>    
+</div>
+</div>
+<div id="ads" class="ads-panel"></div>
+
+<script>
+
+const screen = (window.innerWidth < 1000) ? "small" : "big";
+
+if(screen === "small") {
+document.getElementById("con").className = "container-mobile";
+document.getElementById("logo").className = "logo-panel-mobile";
+document.getElementById("login").className = "login-panel-mobile";
+document.getElementById("ads").className = "ads-panel-mobile";
+}
+async function handleLogin(event) {
+  event.preventDefault(); // stop form from reloading the page
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const errorMsg = document.getElementById("errorMsg");
+
+  try {
+    const res = await fetch("http://192.168.100.99:3000/files/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    if (res.status === 200) {
+      const data = await res.json();
+
+      // Save JWT access token & username
+      localStorage.setItem("loginToken", data.loginToken);
+      localStorage.setItem("displayName", data.displayName);
+      localStorage.setItem("userId", data.userId);
+
+      // Redirect to main page
+      window.location.href = "/i-press";
+    } else if (res.status === 401) {
+      errorMsg.textContent = "Invalid credentials";
+    } else {
+      errorMsg.textContent = "Server error, try again later.";
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    errorMsg.textContent = "Network error.";
+  }
+}
+
+    function togglePwdView() {
+      var pwd = document.getElementById("password");
+      var pwd_t = document.getElementById("pwd-toggle");
+  if (pwd.type === "password") {
+    pwd.type = "text";
+    pwd_t.className = "fa fa-eye-slash";
+  } else {
+    pwd.type = "password";
+    pwd_t.className = "fa fa-eye";
+  }      
+    }
+
+
+// Attach event listener
+document.getElementById("loginForm").addEventListener("submit", handleLogin);
+</script>
+
+</body>
+</html>

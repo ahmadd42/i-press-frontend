@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="">
+
+  <link rel="stylesheet" href="../styling/landing-page.css">
+  <link rel="stylesheet" href="../styling/landing-page-mobile.css">
+  <link rel="stylesheet" href="../styling/signup-page.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+  
+  <title>IPress - New user signup</title>
+</head>
+<body>
+
+<div id="container"></div>  
+
+  <script>
+function loadTemplate() {    
+const con = document.getElementById("container");
+
+let template = (window.innerWidth < 1000)
+        ? "small-signup.html"
+        : "big-signup.html";
+if(window.innerWidth < 800) {        
+
+    fetch("small-signup.html")
+        .then(res => res.text())
+        .then(html => {
+            con.innerHTML = html;   // Template is now in place
+        });
+      }
+
+else {
+      fetch("big-signup.html")
+        .then(res => res.text())
+        .then(html => {
+            con.innerHTML = html;   // Template is now in place
+        });
+}
+}
+/*    const modal = document.getElementById("successModal");
+    const login = document.getElementById('login_btn');
+    const home = document.getElementById('home_btn');
+    const form = document.getElementById("signup_form");
+    const congrats = document.getElementById("congrats");
+
+    form.addEventListener('submit', handleSignup);*/
+
+    function loginClicked() {
+      window.location.href = "login.html";
+    }
+
+    function homeClicked() {
+      window.location.href = "/i-press";
+    }
+ 
+  function togglePwdView() {
+      var pwd = document.getElementById("password");
+      var pwd_t = document.getElementById("pwd-toggle");
+
+  if (pwd.type === "password") {
+    pwd.type = "text";
+    pwd_t.className = "fa fa-eye-slash";
+  } else {
+    pwd.type = "password";
+    pwd_t.className = "fa fa-eye";
+  }      
+    }
+
+
+async function handleSignup(event) {
+
+  event.preventDefault(); // stop form from reloading the page
+
+  const email = document.getElementById("email").value;
+  const country = document.getElementById("country").value;
+  const firstName = document.getElementById("firstName").value;
+  const lastName = document.getElementById("lastName").value;
+  const displayName = document.getElementById("displayName").value;
+  const password = document.getElementById("password").value;
+
+  const userData = {
+    email: email,
+    country: country,
+    f_name: firstName,
+    l_name: lastName,
+    disp_name: displayName,
+    pwd: password
+  };
+
+  try {
+    const res = await fetch("http://192.168.100.99:3000/files/adduser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(userData)
+    });
+
+    if (res.status === 200) {
+      document.getElementById("congrats").innerText = "Congratulations " + displayName + " !";
+      document.getElementById("successModal").style.display = "flex";
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    errorMsg.textContent = "Network error.";
+  }
+}
+
+window.addEventListener("DOMContentLoaded", loadTemplate);
+
+  </script>
+
+</body>
+</html>    

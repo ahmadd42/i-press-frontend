@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="">
+
+  <link rel="stylesheet" href="../styling/landing-page.css">
+  <link rel="stylesheet" href="../styling/sharing-page.css">
+
+  <title>IPress - Share your content</title>
+</head>
+<body>
+
+    <div class="nav-bar">
+      <div class="nav-bar-top"><button class="menu-btn nav-menu"></button></div>
+      <div class="navbar-item-container">
+      <div class="nav-bar-item"><button class="nav-btn nav-home"></button></div>
+      <div class="nav-bar-caption" id="home_btn">Home</div>
+      </div>
+      <div class="navbar-item-container">
+      <div class="nav-bar-item"><button class="nav-btn nav-trending"></button></div>
+      <div class="nav-bar-caption">Trending</div>
+      </div>
+      <div class="navbar-item-container">
+      <div class="nav-bar-item"><button class="nav-btn nav-follows"></button></div>
+      <div class="nav-bar-caption">Followings</div>
+      </div>
+      <div class="navbar-item-container">
+      <div class="nav-bar-item"><button class="nav-btn nav-pub"></button></div>
+      <div class="nav-bar-caption">Publications</div>
+      </div>
+    </div>
+
+    <div class="top-bar bgcolor">
+
+        <div class="tool-bar">
+        <div class="main-logo bg-img-setting"></div>
+        <div class="search-box">
+          <input type="text" placeholder="Search..." />
+          <button type="submit"></button>
+        </div>
+        <div class="voice-search"><button></button></div>
+        <div><button class="publish-btn" onclick="showModal()">Share</button></div>
+        <div id="profile"></div>
+        </div>
+      
+        <div class="cat-bar">
+          <button>All</button>
+          <button>Education</button>
+          <button>E-books</button>
+          <button>Technology</button>          
+          <button>History</button>
+          <button>Politics</button>
+          <button>Economy</button>
+          <button>Lifestyle</button>
+          <button>Sports</button>
+        </div>
+
+        </div>
+
+        <div class="success" id="success_msg">
+        <p>Congratulations !!! Your content has been shared successfully. You can post the content link on social media, or send it to your friends:</p>
+        <p id="link"></p>
+        </div>
+  <!-- === Modal wrapper === -->
+  <div class="modal" id="formModal">
+    <div class="form-container">
+      <span class="close-btn" id="closeModal">&times;</span>
+
+      <div class="progress">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <div id="preview"></div>
+
+      <form id="multi-step-form">
+        <div class="step active">
+          <div class="heading-container">
+            <div class="main-logo bg-img-setting"></div>
+          <h2 class="main-heading">Reach out to the world</h2>
+          </div>
+          <div class="file-container">
+          <input type="hidden" id="user-ID" value="ahmadd42@gmail.com">
+          <div style="margin-top: 1em;"><b>Choose the content file you want to share:</b></div> 
+          <div class="file-type">Pdf documents, Pictures (.jpg, .gif, .png, .tiff) and mp4 videos only</div>
+          <div style="margin-top: 1.25em;"><input type="file" id="user-file" style="border:none;" accept=".pdf,.jpg,.gif,.png,.tiff,.mp4"></div>
+            <div style="margin-top: 2em;"><button class="push-button" type="button" id="next1" style="margin-left: 10em;" disabled>Next</button></div>
+            </div>
+            <div id="bar-container" class="proc-bar-container">
+              <div class="process-bar"></div>
+              <div class="file-type" style="margin-left: 5em;">Processing file ...</div>
+            </div>
+
+        </div>
+
+        <div class="step">
+          <div class="heading-container">
+          <div class="main-logo bg-img-setting"></div>
+          <h2 class="main-heading">Tell us more about your content</h2>
+          </div>
+          <label for="cat">Choose a category:</label>
+          <select id="cat" style="margin-left: 2em;">
+            <option>General</option>
+            <option>Technology</option>
+            <option>Lifestyle</option>
+            <option>Literature</option>
+            <option>Science</option>
+            <option>Education</option>
+            <option>Festivals</option>
+            <option>News</option>
+            <option>Memes</option>
+          </select>
+          <p>Title for your content:</p>
+          <input class="input-element" type="text" id="title" placeholder="Title for your content" required>
+          <p>Briefly describe what is it about:</p>
+          <textarea id="desc" class="desc-box" placeholder="Description" rows="30" cols="30" required></textarea>
+            <p id="err-msg-1" class="error">Please enter value for the required fields</p>          
+
+            <div>
+            <button class="push-button" style="margin-left: 55em;" type="button" id="next2">Next</button>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="heading-container">
+          <div class="main-logo bg-img-setting"></div>
+          <h2 class="main-heading">A few more details</h2>
+          </div>
+          <p>Do you allow your content to be downloaded ?</p>
+          <div class="heading-container">
+          <label for="dld_yes">Yes</label>
+          <input class="input-element" type="radio" class="input-radio" id="dld_yes" name="dld_yes" value="Yes" checked>
+          </div>
+          <div class="heading-container">
+          <label for="dld_no">No</label>
+          <input class="input-element" type="radio" class="input-radio" id="dld_no" name="dld_yes" value="No">
+          </div>
+          <p>Author:</p>
+          <input class="input-element" type="text" id="author" placeholder="Who authored /created this content" required>
+          <p id="err-msg-2" class="error">Please enter value for the required fields</p>
+          <div class="buttons last">
+            <button class="push-button" type="button" id="prev3">Back</button>
+            <button class="share-btn" style="border: none;" type="button" id="share" onclick="handleShare()">Share</button>
+          </div>
+        </div>
+
+  <script>
+  if(!localStorage.getItem("userId"))  
+    window.location.href = "/i-press";
+  else if(window.innerWidth < 800) 
+    window.location.href = "share-s.html";
+
+    // === Modal show/hide ===
+    const modal = document.getElementById("formModal");
+    const closeBtn = document.getElementById("closeModal");
+    const fileInput = document.getElementById("user-file");
+    const prev = document.getElementById("preview");
+    const bar_con = document.getElementById("bar-container");
+    const username = localStorage.getItem("userId");
+    var conID = ""; 
+    var file_ext = "";
+
+    document.getElementById("home_btn").onclick = () => {
+      window.location.href = "/i-press";
+    };
+
+    function showModal() {
+      modal.classList.add("active");
+    }
+
+    fileInput.addEventListener('change', function(event) {
+        const selectedFiles = event.target.files; // FileList object
+        const next = document.getElementById("next1");
+        
+        if (selectedFiles.length > 0) {
+        file_ext = selectedFiles[0].name.split('.').pop();
+        next.disabled = false;
+
+        } else {
+            next.disabled = true;
+        }
+    });
+
+    // Show modal automatically on page load
+    window.addEventListener("load", () => {
+      modal.classList.add("active");
+    });
+
+    // Close modal when user clicks X
+    closeBtn.addEventListener("click", () => {
+      modal.classList.remove("active");
+    });
+
+    // === Multi-step form logic ===
+    const form = document.getElementById("multi-step-form");
+    const steps = document.querySelectorAll(".step");
+    const progressBar = document.getElementById("progress-bar");
+    let currentStep = 0;
+
+    function updateFormPosition() {
+      form.style.transform = `translateX(-${currentStep * 100}%)`;
+      progressBar.style.width = `${((currentStep + 1) / steps.length) * 100}%`;
+      closeBtn.style.zIndex = 1001;
+    }
+
+    document.getElementById("next1").onclick = () => {
+      handleNext1();
+    };
+    document.getElementById("next2").onclick = () => {
+      const title = document.getElementById("title");
+      const desc = document.getElementById("desc");
+      const err = document.getElementById("err-msg-1");
+      err.style.opacity = 0;
+
+      if(title.value === "" || desc.value === "") {
+      err.style.opacity = 1;
+      return;
+      }
+
+      prev.style.opacity = 0;
+      currentStep = 2;
+      updateFormPosition();
+    };
+    document.getElementById("prev3").onclick = () => {
+      prev.style.opacity = 0;
+      currentStep = 1;
+      updateFormPosition();
+    };
+
+    modal.addEventListener('click', (e) => {
+    if (e.target === modal && currentStep === 0)
+    modal.classList.remove('active');
+  });
+
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      alert("Form submitted successfully!");
+      modal.classList.remove("active");
+    };
+
+    form.ontransitionend = (e) => {
+      if(currentStep > 0) {  prev.style.opacity = 1; }
+    };
+
+async function handleNext1() {
+      document.getElementById("next1").disabled = true;
+      closeBtn.style.opacity = 0;
+      currentStep = 1;
+      bar_con.style.opacity = 1;
+      await handleUpload();
+      bar_con.style.opacity = 0;
+      updateFormPosition();
+}
+
+  async function handleUpload() {
+  const userFile = document.getElementById("user-file");
+  const file = userFile.files[0];
+
+  // Create FormData (used for file uploads)
+  const formData = new FormData();
+  formData.append('userId', username);
+  formData.append('file', file);
+
+  try {
+  const response = await fetch('http://localhost:3000/files/upload', {
+  method: 'POST',
+  body: formData,
+});
+
+  if (!response.ok) {
+    throw new Error("Sorry ! Could not fetch your feeds.");
+      }
+
+  const data = await response.json(); // JSONPlaceholder returns an array
+
+conID = data.ContentID;
+loadFilePreview(conID);
+prev.style.opacity = 0;
+
+  } catch(err) {
+    console.log("Error uploading data: ", err);
+    }
+}
+
+
+async function handleShare() {
+
+  const title_inp = document.getElementById("title").value;
+  const desc_inp = document.getElementById("desc").value;
+  const dldyes = document.getElementById("dld_yes");
+  const dldno = document.getElementById("dld_no");
+  const dld_inp = dldyes.checked ? '1' : '0';
+  const author_inp = document.getElementById("author").value;
+  const cat_inp = document.getElementById("cat").value;
+  const author = document.getElementById("author");
+  const err = document.getElementById("err-msg-2");
+  err.style.opacity = 0;
+
+  if(author.value === "") {
+    err.style.opacity = 1;
+    return;
+  } 
+
+
+    const res = await fetch("http://localhost:3000/files/recordmetadata", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    body: JSON.stringify({
+    contentid: conID,
+    title: title_inp,
+    des: desc_inp,
+    downloadable: dld_inp,
+    author: author_inp,
+    cat: cat_inp
+  })
+    });
+
+    if (res.status === 200) {
+      document.getElementById("link").innerText = "http://localhost/i-press/view?id=" + conID;
+      document.getElementById("success_msg").style.opacity = 1;
+      conID = "";
+      file_ext = "";
+      modal.classList.remove("active");
+    } else {
+      errorMsg.textContent = "Server error, try again later.";
+    }
+  }
+
+    function loadFilePreview(contID) {
+      var HTMLString = "";
+      var prevURL = "";
+
+          if(file_ext === "pdf") {
+          prevURL = `http://localhost:3000/files/getContent/${contID}.jpg`;
+          HTMLString = `<div class="preview-box bg-img-setting" style="background-image: url('${prevURL}');"></div>`;
+          }
+          else if(file_ext === "jpg" || file_ext === "jpeg" || file_ext === "gif" || file_ext === "png" || file_ext === "tiff") {
+              prevURL = `http://localhost:3000/files/getContent/${contID}.${file_ext}`;
+                HTMLString = `<div class="preview-box bg-img-setting" style="background-image: url('${prevURL}');"></div>`;
+          }
+          else if(record.Extension === "mp3" || record.Extension === "mp4" || record.Extension === "mpeg") {
+            prevURL = `http://localhost:3000/files/getContent/${contID}.${file_ext}`;
+            HTMLString = `<video class="preview-box" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video>`;
+          }
+          //alert(HTMLString);
+          prev.innerHTML = HTMLString;
+    }
+
+
+  </script>
+
+</body>
+</html>

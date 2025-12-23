@@ -1,0 +1,105 @@
+    <div class="nav-bar-mobile" id="side-nav">
+      <div class="navbar-item-container">
+      <div><button class="nav-btn nav-home"></button></div>
+      <div class="nav-bar-caption">Home</div>
+      </div>
+      <div class="navbar-item-container">
+      <div><button class="nav-btn nav-trending"></button></div>
+      <div class="nav-bar-caption">Trending</div>
+      </div>
+      <div class="navbar-item-container">
+      <div><button class="nav-btn nav-follows"></button></div>
+      <div class="nav-bar-caption">Followings</div>
+      </div>
+      <div class="navbar-item-container">
+      <div><button class="nav-btn nav-pub"></button></div>
+      <div class="nav-bar-caption">My content</div>
+      </div>
+    </div>
+
+
+<div class="top-panel-share">
+<div class="share-panel"><div class="navbar-top-mobile"><button class="menu-btn nav-menu" id="menu-btn"></button></div>    
+<div class="title-bar">
+    <div class="main-logo-signup bg-img-setting"></div>
+    <div id="profile"></div>
+</div>
+</div>
+<div class="search-panel-mobile">
+<div class="search-box-mobile">
+    <input type="text" placeholder="Search..." />
+    <button type="submit"></button>
+</div>
+<div class="voice-search"><button></button></div>
+</div>
+</div>
+
+        <div>
+
+<form class="signup-form" id="signup_form" tabindex="0" onsubmit="handleSignup(event)">
+
+    <h2>Create your account with us</h2>
+
+    <div style="display: flex;">
+
+ <div class="labels1">
+    <label for="firstName">First Name:</label>
+    <label for="lastName">Last Name:</label>
+    <label for="country">Country:</label>
+    <label for="email">Email Address:</label>
+    <label for="displayName">Display Name: <span class="explanation">(This is the name that will appear on your comments)</span></label>
+    <label for="password">Password:</label>        
+ </div>           
+
+ <div class="inputs1">
+    <input type="text" id="firstName" name="firstName" tabindex="1" required>
+    <input type="text" id="lastName" name="lastName" tabindex="2" required>
+    <select id="country" name="country" tabindex="3" required>
+      <option value="">-- Select Country --</option>
+      <option value="US">United States</option>
+      <option value="UK">United Kingdom</option>
+      <option value="CA">Canada</option>
+      <option value="AU">Australia</option>
+      <option value="PK">Pakistan</option>
+      <option value="IN">India</option>
+      <option value="DE">Germany</option>
+      <option value="FR">France</option>
+      <option value="JP">Japan</option>
+      <option value="CN">China</option>
+      <option value="BR">Brazil</option>
+      <option value="ZA">South Africa</option>
+      <option value="Other">Other</option>
+    </select>    
+
+    <input type="email" id="email" name="email" tabindex="4" required>
+    <input type="text" id="displayName" name="displayName" tabindex="5" required>
+    <div class="password-container">
+    <input type="password" id="password" name="password" style="margin-top: 2.9em;" tabindex="6" required minlength="8">  
+    <span class="password-toggle" id="togglePassword" onclick="togglePwdView()"><i id="pwd-toggle" class="fa fa-eye"></i></span>
+    </div>
+ </div>
+ </div>
+  <div style="align-content: center;"> <button type="submit" tabindex="7">Sign Up</button></div>
+    <!--<div class="align-center">
+
+    <button type="submit" tabindex="7">Sign Up</button>
+
+    </div>-->
+      </form>
+
+        </div>
+
+    <div class="ads-panel-mobile"></div>
+
+<!-- Success Modal -->
+  <div id="successModal" class="modal">
+    <div class="modal-content">
+      <h3 id="congrats"></h3>
+      <p>Your account has been created successfully.</p>
+      <div class="last-buttons">
+      <button class="close-btn" id="login_btn" onclick="loginClicked()">Sign in</button>
+      <button class="close-btn" id="home_btn" onclick="homeClicked()">Back to Home</button>
+
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="">
+
+  <link rel="stylesheet" href="../styling/landing-page-mobile.css">
+  <link rel="stylesheet" href="../styling/sharing-page.css">
+  <link rel="stylesheet" href="../styling/landing-page.css">
+
+  <title>IPress - Share your content</title>
+</head>
+<body>
+    <div class="nav-bar-mobile" id="side-nav">
+      <div class="navbar-item-container">
+      <div><button class="nav-btn nav-home"></button></div>
+      <div class="nav-bar-caption">Home</div>
+      </div>
+      <div class="navbar-item-container">
+      <div><button class="nav-btn nav-trending"></button></div>
+      <div class="nav-bar-caption">Trending</div>
+      </div>
+      <div class="navbar-item-container">
+      <div><button class="nav-btn nav-follows"></button></div>
+      <div class="nav-bar-caption">Followings</div>
+      </div>
+      <div class="navbar-item-container">
+      <div><button class="nav-btn nav-pub"></button></div>
+      <div class="nav-bar-caption">My content</div>
+      </div>
+    </div>
+
+
+<div class="top-panel-share">
+<div class="share-panel"><div class="navbar-top-mobile"><button class="menu-btn nav-menu" id="menu-btn"></button></div>    
+<div class="title-bar">
+    <div class="main-logo-share bg-img-setting"></div>
+    <div id="profile"></div>
+</div>
+</div>
+<div class="search-panel-mobile">
+<div class="search-box-mobile">
+    <input type="text" placeholder="Search..." />
+    <button type="submit"></button>
+</div>
+<div class="voice-search"><button></button></div>
+</div>
+
+        <div class="cat-bar-mobile">
+          <button>All</button>
+          <button>Education</button>
+          <button>E-books</button>
+          <button>Technology</button>          
+          <button>History</button>
+          <button>Politics</button>
+          <button>Economy</button>
+          <button>Lifestyle</button>
+          <button>Sports</button>
+        </div>
+
+</div>
+          <div id="chosen-file" class="file-container-mobile">
+          <input type="hidden" id="user-ID" value="ahmadd42@gmail.com">
+          <div style="margin-top: 1em;"><b>Choose the content file you want to share:</b></div> 
+          <div class="file-type">Pdf documents, Pictures (.jpg, .gif, .png, .tiff) and mp4 videos only</div>
+          <div style="display:flex; margin-top: 1em;">
+          <div><input type="file" id="user-file" style="border:none;" accept=".pdf,.jpg,.gif,.png,.tiff,.mp4"></div>
+          <div><button class="push-button" type="button" id="upload" disabled>Upload</button></div>
+          </div>
+          <div id="bar-container" class="procbar-container-mobile">
+              <div class="process-bar"></div>
+              <div class="file-type" style="margin-left: 5em;">Wait...</div>
+            </div>
+          </div>
+
+          <div id="details" class="block-container-mobile">
+          <label for="cat">Choose a category:</label>
+          <select id="cat" style="margin-left: 2em; width:50%; height:2em;" disabled>
+            <option>General</option>
+            <option>Technology</option>
+            <option>Lifestyle</option>
+            <option>Literature</option>
+            <option>Science</option>
+            <option>Education</option>
+            <option>Festivals</option>
+            <option>News</option>
+            <option>Memes</option>
+          </select>
+
+          <p>Title for your content:</p>
+          <input class="input-element-mobile" type="text" id="title" placeholder="Title for your content" required disabled>
+          <p>Briefly describe what is it about:</p>
+          <textarea id="desc" class="desc-box-mobile" placeholder="Description" rows="30" cols="30" required disabled></textarea>
+          
+          <p>Do you allow your content to be downloaded ?</p>
+          <div class="heading-container">
+          <label for="dld_yes">Yes</label>
+          <input class="input-element-mobile" type="radio" class="input-radio" id="dld_yes" name="dld_options" value="Yes" checked disabled>
+          </div>
+          <div class="heading-container">
+          <label for="dld_no">No</label>
+          <input class="input-element-mobile" type="radio" class="input-radio" id="dld_no" name="dld_options" value="No" disabled>
+          </div>
+          <p>Author:</p>
+          <input class="input-element-mobile" type="text" id="author" placeholder="Who authored /created this content" required disabled>
+          <button class="push-button" style="margin-left: 9em;" type="submit" id="share" onclick="handleShare()" disabled>Share</button>
+          </div>
+
+<div class="success-mobile" id="success_msg">
+  <p>Your content has been shared successfully. You can send your content's link to family and friends or post it on social media:</p>
+  <p id="link" style="margin-top: 1.5em;"></p>
+  <button class="push-button" style="margin-left: 10em;" id="posted">OK</button>
+</div>          
+
+<script>
+  if(!localStorage.getItem("userId"))  
+    window.location.href = "/i-press";
+  else if(window.innerWidth >= 800) 
+    window.location.href = "share.html";
+
+  const menu_btn = document.getElementById("menu-btn");
+  const side_nav = document.getElementById("side-nav");
+  const user_file = document.getElementById("user-file");
+  const upload_btn = document.getElementById("upload");
+  const p_bar = document.getElementById("bar-container");
+  const cat = document.getElementById("cat");
+  const title = document.getElementById("title");
+  const desc = document.getElementById("desc");
+  const dld_yes = document.getElementById("dld_yes");
+  const dld_no = document.getElementById("dld_no");
+  const author = document.getElementById("author");
+  const share_btn = document.getElementById("share");
+  const bar_con = document.getElementById("bar-container");
+  const username = localStorage.getItem("userId");
+
+  var conID = ""; 
+  var file_ext = "";
+
+
+  async function handleUpload() {
+  const file = user_file.files[0];
+
+  // Create FormData (used for file uploads)
+  const formData = new FormData();
+  formData.append('userId', username);
+  formData.append('file', file);
+
+  try {
+  const response = await fetch('http://192.168.100.99:3000/files/upload', {
+  method: 'POST',
+  body: formData,
+});
+
+  if (!response.ok) {
+    throw new Error("Sorry ! Could not fetch your feeds.");
+      }
+
+  const data = await response.json(); // JSONPlaceholder returns an array
+
+conID = data.ContentID;
+//loadFilePreview(conID);
+//prev.style.opacity = 0;
+
+  } catch(err) {
+    console.log("Error uploading data: ", err);
+    }
+}
+
+
+async function handleShare() {
+
+if(title.value === "" || desc.value === "" || author.value === "") {
+  alert("Please enter information for all fields");
+  return;
+}
+
+  const title_inp = document.getElementById("title").value;
+  const desc_inp = document.getElementById("desc").value;
+  const dldyes = document.getElementById("dld_yes");
+  const dldno = document.getElementById("dld_no");
+  const dld_inp = dldyes.checked ? '1' : '0';
+  const author_inp = document.getElementById("author").value;
+  const cat_inp = document.getElementById("cat").value;
+
+  const res = await fetch("http://192.168.100.99:3000/files/recordmetadata", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    body: JSON.stringify({
+    contentid: conID,
+    title: title_inp,
+    des: desc_inp,
+    downloadable: dld_inp,
+    author: author_inp,
+    cat: cat_inp
+  })
+    });
+
+    if (res.status === 200) {
+      document.getElementById("link").innerText = "http://192.168.100.99/i-press/view?id=" + conID;
+      document.getElementById("success_msg").classList.add("active");
+      conID = "";
+      file_ext = "";
+    } else {
+      alert("Server error, try again later.");
+    }
+  }
+
+      user_file.addEventListener('change', function(event) {
+        const selectedFiles = event.target.files; // FileList object
+        
+        if (selectedFiles.length > 0) {
+        file_ext = selectedFiles[0].name.split('.').pop();
+        upload_btn.disabled = false;
+
+        } else {
+            upload_btn.disabled = true;
+        }
+    });
+
+  async function upload_clicked() {
+  user_file.disabled = true;
+  upload_btn.disabled = true;
+
+  bar_con.style.opacity = 1;
+  await handleUpload();
+  bar_con.style.opacity = 0;
+
+  cat.disabled = false;
+  title.disabled = false;
+  desc.disabled = false;
+  dld_no.disabled = false;
+  dld_yes.disabled = false;
+  author.disabled = false;
+  share_btn.disabled = false;
+
+  }
+
+upload_btn.addEventListener("click", upload_clicked);
+
+document.getElementById("posted").addEventListener("click", () => {
+  window.location.href = "/i-press";
+});
+
+  menu_btn.addEventListener("click", () => {
+    side_nav.classList.toggle("active");
+  });
+
+
+</script>          
+</body>
+</html>
