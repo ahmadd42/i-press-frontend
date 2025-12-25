@@ -293,7 +293,8 @@ async function handleNext1() {
   const data = await response.json(); // JSONPlaceholder returns an array
 
 conID = data.ContentID;
-loadFilePreview(conID);
+prev.innerHTML = `<div class="preview-box bg-img-setting" style="background-image: url('../graphics/pdf-icon.jpg');"></div>`;
+//loadFilePreview(conID);
 prev.style.opacity = 0;
 
   } catch(err) {
@@ -346,6 +347,16 @@ async function handleShare() {
       errorMsg.textContent = "Server error, try again later.";
     }
   }
+
+  async function resourceExists(url) {
+  try {
+    const response = await fetch(url, { method: "HEAD" });
+    return response.ok;
+  } catch (err) {
+    return false;
+  }
+}
+
 
     function loadFilePreview(contID) {
       var HTMLString = "";

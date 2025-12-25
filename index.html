@@ -124,9 +124,18 @@ async function fetchFeeds() {
   var HTMLString = '';
           if(record.Extension === ".pdf") {
           const prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}.jpg`;
+          const exists = await resourceExists(prevURL);
+
+          if(exists === false) {
+          HTMLString += (screen === "big") 
+                        ? `<div class="doc-img"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon bg-img-setting" style="background-image: url('graphics/pdf-icon.jpg');"></div>` 
+                        : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon-mobile bg-img-setting" style="background-image: url('graphics/pdf-icon.jpg');"></div>`;
+          }
+          else {
           HTMLString += (screen === "big") 
                         ? `<div class="doc-img"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon bg-img-setting" style="background-image: url('${prevURL}');"></div>` 
                         : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon-mobile bg-img-setting" style="background-image: url('${prevURL}');"></div>`;
+          }                        
           }
           else if(record.Extension === ".jpg" || record.Extension === ".jpeg" || record.Extension === ".gif" || record.Extension === ".png" || record.Extension === ".tiff") {
                 HTMLString += (screen === "big") 
@@ -230,6 +239,15 @@ function signOut() {
   localStorage.clear();
   getSigninStatus();
 }    
+
+async function resourceExists(url) {
+  try {
+    const response = await fetch(url, { method: "HEAD" });
+    return response.ok;
+  } catch (err) {
+    return false;
+  }
+}
 
 window.onclick = function(event) {
   const profile_area = document.getElementById("profile");
