@@ -133,7 +133,7 @@
 
 <script>
   if(!localStorage.getItem("userId"))  
-    window.location.href = "/i-press";
+    window.location.href = "/";
   else if(window.innerWidth >= 800) 
     window.location.href = "share.html";
 
@@ -217,7 +217,7 @@ if(title.value === "" || desc.value === "" || author.value === "") {
     });
 
     if (res.status === 200) {
-      document.getElementById("link").innerText = "http://192.168.100.99/i-press/view?id=" + conID;
+      document.getElementById("link").innerText = "/view?id=" + conID;
       document.getElementById("success_msg").classList.add("active");
       conID = "";
       file_ext = "";
@@ -259,7 +259,7 @@ if(title.value === "" || desc.value === "" || author.value === "") {
 upload_btn.addEventListener("click", upload_clicked);
 
 document.getElementById("posted").addEventListener("click", () => {
-  window.location.href = "/i-press";
+  window.location.href = "/";
 });
 
   menu_btn.addEventListener("click", () => {

@@ -165,7 +165,7 @@
 
   <script>
   if(!localStorage.getItem("userId"))  
-    window.location.href = "/i-press";
+    window.location.href = "/";
   else if(window.innerWidth < 800) 
     window.location.href = "share-s.html";
 
@@ -180,7 +180,7 @@
     var file_ext = "";
 
     document.getElementById("home_btn").onclick = () => {
-      window.location.href = "/i-press";
+      window.location.href = "/";
     };
 
     function showModal() {
@@ -338,7 +338,7 @@ async function handleShare() {
     });
 
     if (res.status === 200) {
-      document.getElementById("link").innerText = "http://localhost/i-press/view?id=" + conID;
+      document.getElementById("link").innerText = "/view?id=" + conID;
       document.getElementById("success_msg").style.opacity = 1;
       conID = "";
       file_ext = "";

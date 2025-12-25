@@ -65,7 +65,7 @@
     </form>
 <!--  </div> -->
     <div class="signup-div">
-      <a href="/i-press">Back to Home</a>
+      <a href="/">Back to Home</a>
       <a href="signup.html">New user ? Sign Up to create your account</a>
     </div>    
 </div>
@@ -107,7 +107,7 @@ async function handleLogin(event) {
       localStorage.setItem("userId", data.userId);
 
       // Redirect to main page
-      window.location.href = "/i-press";
+      window.location.href = "/";
     } else if (res.status === 401) {
       errorMsg.textContent = "Invalid credentials";
     } else {
