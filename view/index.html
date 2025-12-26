@@ -206,7 +206,7 @@ const extension = data[0].ext;
 const dld_status = data[0].can_download;
 const uploader = data[0].uploader;
 const title = data[0].title;
-const docURL = `https://i-press-backend-production.up.railway.app/files/getContent/${value}${extension}`
+const docURL = `https://i-press-backend-production.up.railway.app/files/getContent/${value}${extension}/${screen}`;
 document.getElementById("doc-view-panel").innerHTML = generateViewerHTML(docURL, extension, dld_status);
 //})
 document.getElementById("con_title").innerText = title;
