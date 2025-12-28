@@ -283,7 +283,9 @@ font-size: 13px;
     transition: transform 0.4s ease-in-out;
 }
 .content-icon img {
-    object-fit: fill;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 .content-icon:hover {
     transform: scale(2);
