@@ -172,7 +172,8 @@ display: flex;
 }
 
 .bg-img-setting {
-  background-size: contain;
+  object-fit: fill;
+  /*background-size: contain;*/
   background-repeat: no-repeat;
   background-position: center;
 }

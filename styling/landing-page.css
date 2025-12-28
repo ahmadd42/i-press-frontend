@@ -184,7 +184,8 @@ padding-left: 1.5em;
   background-color: #dfdeed;
 }
 .bg-img-setting {
-  background-size: contain;
+  object-fit: fill;    
+  /*background-size: contain;*/
   background-repeat: no-repeat;
   background-position: center;
 }
