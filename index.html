@@ -133,14 +133,14 @@ async function fetchFeeds() {
           }
           else {
           HTMLString += (screen === "big") 
-                        ? `<div class="doc-img"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon" style="background-image: url('${prevURL}');"></div>` 
-                        : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon-mobile" style="background-image: url('${prevURL}');"></div>`;
+                        ? `<div class="doc-img"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon"><img src='${prevURL}' /></div>` 
+                        : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon-mobile"><img src='${prevURL}' /></div>`;
           }                        
           }
           else if(record.Extension === ".jpg" || record.Extension === ".jpeg" || record.Extension === ".gif" || record.Extension === ".png" || record.Extension === ".tiff") {
                 HTMLString += (screen === "big") 
-                              ? `<div class="doc-img"><div class="username"><p class="grid-text uploader">Image</p></div><div class="content-icon" style="background-image: url('${conURL}');"></div>` 
-                              : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">Image</p></div><div class="content-icon-mobile" style="background-image: url('${conURL}');"></div>`;
+                              ? `<div class="doc-img"><div class="username"><p class="grid-text uploader">Image</p></div><div class="content-icon"><img src='${conURL}' /></div>` 
+                              : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">Image</p></div><div class="content-icon"><img src='${conURL}' /></div>`;
           }
           else if(record.Extension === ".mp3" || record.Extension === ".mp4" || record.Extension === ".mpeg") {
             //const prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}${record.Extension}`;

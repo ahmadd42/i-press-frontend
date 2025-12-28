@@ -364,11 +364,11 @@ async function handleShare() {
 
           if(file_ext === "pdf") {
           prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${contID}.jpg/big`;
-          HTMLString = `<div class="preview-box" style="background-image: url('${prevURL}');"></div>`;
+          HTMLString = `<div class="preview-box"><img src='${prevURL}' /></div>`;
           }
           else if(file_ext === "jpg" || file_ext === "jpeg" || file_ext === "gif" || file_ext === "png" || file_ext === "tiff") {
               prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${contID}.${file_ext}/big`;
-                HTMLString = `<div class="preview-box" style="background-image: url('${prevURL}');"></div>`;
+                HTMLString = `<div class="preview-box"><img src='${prevURL}' /></div>`;
           }
           else if(record.Extension === "mp3" || record.Extension === "mp4" || record.Extension === "mpeg") {
             prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${contID}.${file_ext}/big`;
