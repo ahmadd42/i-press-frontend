@@ -117,14 +117,14 @@ async function fetchFeeds() {
     const elapsedTime = getElapsedTime(record.SharedOn);
     const isTruncated = record.Description.length > 150;
     const shortText = record.Description.slice(0, 150);
-    const conURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}${record.Extension}`
+    const conURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}${record.Extension}/${screen}`;
 
   const div = document.createElement('div');
   div.className = (screen === "big") ? 'doc-item' : 'doc-item-mobile';
   var HTMLString = '';
           if(record.Extension === ".pdf") {
-          const prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}.jpg`;
-          const exists = await resourceExists(prevURL);
+          let prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}.jpg/${screen}`;
+          let exists = await resourceExists(prevURL);
 
           if(exists === false) {
           HTMLString += (screen === "big") 
@@ -143,10 +143,10 @@ async function fetchFeeds() {
                               : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">Image</p></div><div class="content-icon-mobile bg-img-setting" style="background-image: url('${conURL}');"></div>`;
           }
           else if(record.Extension === ".mp3" || record.Extension === ".mp4" || record.Extension === ".mpeg") {
-            const prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}${record.Extension}`;
+            //const prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}${record.Extension}`;
             HTMLString += (screen === "big")
-                          ? `<div class="video-prev-container"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><video class="video-prev" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video>`
-                          : `<div class="video-prev-container-mobile"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><video class="video-prev-mobile" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video>`;  
+                          ? `<div class="video-prev-container"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><video class="video-prev" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${conURL}" type="video/mp4"></video>`
+                          : `<div class="video-prev-container-mobile"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><video class="video-prev-mobile" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${conURL}" type="video/mp4"></video>`;  
           }
           HTMLString += `<div class="username"><p class="grid-text uploader">${record.UserID}</p></div></div>`;
 
