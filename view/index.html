@@ -27,6 +27,8 @@
   <link rel="stylesheet" href="../styling/doc-view-page.css">
   <link rel="stylesheet" href="../styling/landing-page-mobile.css">
 
+  <link rel="icon" type="image/png" href="../graphics/favicon.png">
+
   <script>
     function getElapsedTime(GivenDatetime) {
       var msg = "";
@@ -188,6 +190,7 @@ return viewer_html;
 
 async function fetchDocument() {  
 
+  //fetch('http://192.168.100.99:3000/files/getbasicinfo', {
   fetch('https://i-press-backend-production.up.railway.app/files/getbasicinfo', {
   method: 'POST',
   headers: {
@@ -206,6 +209,7 @@ const extension = data[0].ext;
 const dld_status = data[0].can_download;
 const uploader = data[0].uploader;
 const title = data[0].title;
+//const docURL = `http://localhost:3000/files/getContent/${value}${extension}/${screen}`;
 const docURL = `https://i-press-backend-production.up.railway.app/files/getContent/${value}${extension}/${screen}`;
 document.getElementById("doc-view-panel").innerHTML = generateViewerHTML(docURL, extension, dld_status);
 //})
@@ -222,7 +226,8 @@ async function fetchComments() {
   const container = document.getElementById("cmt_container");
   container.innerHTML = ``;
 
-  fetch('https://i-press-backend-production.up.railway.app/files/getcomments', {
+  //fetch('http://localhost:3000/files/getcomments', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getcomments', {    
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -255,9 +260,12 @@ async function handlePost() {
   //event.preventDefault(); // stop form from reloading the page
   const commenttext = document.getElementById("comment").value;
   const user = localStorage.getItem("userId");
+  const preloader = document.getElementById("loading2");
+  preloader.style.display = "flex";
 
   try {
-    const res = await fetch("https://i-press-backend-production.up.railway.app/files/postcomment", {
+    //const res = await fetch("http://localhost:3000/files/postcomment", {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/postcomment", {      
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -275,13 +283,15 @@ async function handlePost() {
     console.error("Error in comment posting:", err);
     errorMsg.textContent = "Network error.";
   }
+  preloader.style.display = "none";
 }
 
 async function fetchLikes() {
 
   const like = document.getElementById("likes");
 
-  fetch('https://i-press-backend-production.up.railway.app/files/getlikes', {
+  //fetch('http://localhost:3000/files/getlikes', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getlikes', {    
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -305,7 +315,8 @@ async function fetchDislikes() {
 
   const dislike = document.getElementById("dislikes");
 
-  fetch('https://i-press-backend-production.up.railway.app/files/getdislikes', {
+  //fetch('http://localhost:3000/files/getdislikes', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getdislikes', {    
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -338,7 +349,8 @@ async function fetchUserReaction() {
 
   const UserId = localStorage.getItem("userId");
 
-  fetch('https://i-press-backend-production.up.railway.app/files/getuserreaction', {
+  //fetch('http://localhost:3000/files/getuserreaction', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getuserreaction', {    
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -405,8 +417,10 @@ function normalizeButton(btn) {
 
 async function handleLike() {
   var op = "";
+  const preloader = document.getElementById("loading1");
+
     if(localStorage.getItem("userId") !== null) {
-        
+    preloader.style.display = "flex";
     const user = localStorage.getItem("userId");
 
       if(UserReaction === ""){
@@ -419,7 +433,8 @@ async function handleLike() {
 
       if(op === "add" || op === "delete") {
 
-    const res = await fetch("https://i-press-backend-production.up.railway.app/files/adddeletereaction", {
+    //const res = await fetch("http://localhost:3000/files/adddeletereaction", {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/adddeletereaction", {      
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -435,14 +450,16 @@ async function handleLike() {
       errorMsg.textContent = "Server error, try again later.";
     }
   }
-
+      preloader.style.display = "none";
     }
 }
 
 async function handleDislike() {
   var op = "";
+  const preloader = document.getElementById("loading1");
+
     if(localStorage.getItem("userId") !== null) {
-        
+    preloader.style.display = "flex";    
     const user = localStorage.getItem("userId");
 
       if(UserReaction === ""){
@@ -455,7 +472,8 @@ async function handleDislike() {
 
       if(op === "add" || op === "delete") {
 
-    const res = await fetch("https://i-press-backend-production.up.railway.app/files/adddeletereaction", {
+    //const res = await fetch("http://localhost:3000/files/adddeletereaction", {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/adddeletereaction", {      
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -471,7 +489,7 @@ async function handleDislike() {
       errorMsg.textContent = "Server error, try again later.";
     }
   }
-
+    preloader.style.display = "none";
     }
 }
 

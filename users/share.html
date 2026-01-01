@@ -25,6 +25,7 @@
 
   <link rel="stylesheet" href="../styling/landing-page.css">
   <link rel="stylesheet" href="../styling/sharing-page.css">
+  <link rel="icon" type="image/png" href="../graphics/favicon.png">
 
   <title>IPress - Share your content</title>
 </head>
@@ -161,6 +162,7 @@
             <button class="push-button" type="button" id="prev3">Back</button>
             <button class="share-btn" style="border: none;" type="button" id="share" onclick="handleShare()">Share</button>
           </div>
+                 <div class="loader" id="loading3"><img src="../graphics/flowing-gradient.gif" /></div>     
         </div>
 
   <script>
@@ -314,6 +316,7 @@ async function handleShare() {
   const cat_inp = document.getElementById("cat").value;
   const author = document.getElementById("author");
   const err = document.getElementById("err-msg-2");
+  const preloader = document.getElementById("loading3");
   err.style.opacity = 0;
 
   if(author.value === "") {
@@ -321,6 +324,7 @@ async function handleShare() {
     return;
   } 
 
+    preloader.style.display = "flex";
 
     const res = await fetch("https://i-press-backend-production.up.railway.app/files/recordmetadata", {
       method: "POST",
@@ -336,6 +340,8 @@ async function handleShare() {
     cat: cat_inp
   })
     });
+
+    preloader.style.display = "none";
 
     if (res.status === 200) {
       document.getElementById("link").innerText = "/view?id=" + conID;
