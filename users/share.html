@@ -295,7 +295,6 @@ async function handleNext1() {
   const data = await response.json(); // JSONPlaceholder returns an array
 
 conID = data.ContentID;
-prev.innerHTML = `<div class="preview-box bg-img-setting" style="background-image: url('../graphics/pdf-icon.jpg');"></div>`;
 loadFilePreview(conID);
 prev.style.opacity = 0;
 

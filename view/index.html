@@ -180,7 +180,7 @@ viewer_html += (d_status === 0) ? ` oncontextmenu="return false"></div>` : `></d
 
 else if(ext === ".mp3" || ext === ".mp4" || ext === ".mpeg") {
 
-viewer_html = (screen === "small") ? `<video id="myVideo" width="90%" controls` : `<video id="myVideo" width="70%" controls`;
+viewer_html = (screen === "small") ? `<video id="myVideo" class="video-wrapper" controls` : `<video id="myVideo" class="video-wrapper" controls`;
 viewer_html += (d_status === 0) ? ` controlsList="nodownload" oncontextmenu="return false"` : ``;  
 viewer_html += ` autoplay><source src="${path}" type="video/mp4"></video>`;
 }

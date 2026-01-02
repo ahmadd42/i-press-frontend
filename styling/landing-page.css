@@ -296,7 +296,9 @@ font-size: 13px;
     background-image: url("../graphics/video-icon.jpg");
 }
 .video-prev {
-    width: 20em;
+    width: 13em;
+    height: 15em;
+    object-fit: contain;
     transition: transform 0.4s ease-in-out;
 }
 .video-prev:hover {
