@@ -161,13 +161,22 @@ body{
     padding-top: 1em;
 }
 .video-prev-mobile {
-    width: 9em;
+    width: 8em;
+    height: 5em;
+    cursor: pointer;
+    border: solid 3px #c3b278;
+    background-color: #000;
     transition: transform 0.4s ease-in-out;
 }
 .video-prev-mobile:hover {
     padding-left: 3em;
     transform: scale(2.5); 
   }
+.inline-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 
 .content-icon-mobile {
     width: 8em;

@@ -152,8 +152,8 @@ async function fetchFeeds() {
             const prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}${record.Extension}/${screen}`;
 
             HTMLString += (screen === "big")
-                          ? `<div class="video-prev-container"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><video class="video-prev" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video>`
-                          : `<div class="video-prev-container-mobile"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><video class="video-prev-mobile" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video>`;  
+                          ? `<div class="video-prev-container"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><div class="video-prev"><video class="inline-video" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video></div>`
+                          : `<div class="video-prev-container-mobile"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><div class="video-prev-mobile"><video class="inline-video" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video></div>`;  
           }
           HTMLString += `<div class="username"><p class="grid-text uploader">${record.UserID}</p></div></div>`;
 
@@ -195,7 +195,8 @@ async function fetchFeeds() {
   }
 
   /// Code to play video preview on mouse over
-const previewVideo = (screen === "big") ? div.querySelector(".video-prev") : div.querySelector(".video-prev-mobile");
+//const previewVideo = (screen === "big") ? div.querySelector(".video-prev") : div.querySelector(".video-prev-mobile");
+const previewVideo = div.querySelector(".inline-video");
 
 if(previewVideo) {
 

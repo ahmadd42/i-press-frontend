@@ -1,15 +1,12 @@
 body {
       font-family: Arial, sans-serif;
-      /*background: #fbfbf7;*/
+      background: #fbfbf7;
     }
     .signup-form {
       margin-top: 4rem;
       margin-left: 8rem;
       margin-bottom: 1em;
-      background: #f7f7f7;
       padding: .2em .5em;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       width: 65%;
     }
     .signup-form h2 {
@@ -30,7 +27,7 @@ body {
     height: 2em;
     margin-bottom: 1.4em;
     margin-left: .8em;
-    border: 1px solid #b8b8b2;
+    border: 1px solid #000;
     border-radius: 6px;
     }
     .signup-form button {
@@ -56,7 +53,7 @@ body {
     width: 77%;
     height: 10%;
     padding-top: .5rem;
-    background-color: #ffffff;
+    background-color: #fbfbf7;
     opacity: 98%;
     z-index: 10;
 }

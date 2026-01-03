@@ -57,7 +57,7 @@
       </div>
 
       <div class="actions">
-        <button type="submit">Sign in</button>
+        <button id="submit_btn" type="submit">Sign in</button>
       </div>
 
       <p class="note">By signing in you agree to our terms of service.</p>
@@ -86,9 +86,13 @@ document.getElementById("ads").className = "ads-panel-mobile";
 async function handleLogin(event) {
   event.preventDefault(); // stop form from reloading the page
 
+  const btn = document.getElementById("submit_btn");
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const errorMsg = document.getElementById("errorMsg");
+
+  btn.textContent = ". . . . . . .";
+  btn.disabled = true;
 
   try {
     const res = await fetch("https://i-press-backend-production.up.railway.app/files/login", {
@@ -111,8 +115,12 @@ async function handleLogin(event) {
       window.location.href = "/";
     } else if (res.status === 401) {
       errorMsg.textContent = "Invalid credentials";
+      btn.textContent = "Sign in";
+      btn.disabled = false;
     } else {
       errorMsg.textContent = "Server error, try again later.";
+      btn.textContent = "Sign in";
+      btn.disabled = false;
     }
   } catch (err) {
     console.error("Login error:", err);

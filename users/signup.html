@@ -92,12 +92,16 @@ async function handleSignup(event) {
 
   event.preventDefault(); // stop form from reloading the page
 
+  const btn = document.getElementById("signup_btn");
   const email = document.getElementById("email").value;
   const country = document.getElementById("country").value;
   const firstName = document.getElementById("firstName").value;
   const lastName = document.getElementById("lastName").value;
   const displayName = document.getElementById("displayName").value;
   const password = document.getElementById("password").value;
+
+  btn.textContent = ". . . . . .";
+  btn.disabled = true;
 
   const userData = {
     email: email,
@@ -123,7 +127,7 @@ async function handleSignup(event) {
     }
   } catch (err) {
     console.error("Login error:", err);
-    errorMsg.textContent = "Network error.";
+    //errorMsg.textContent = "Network error.";
   }
 }
 
