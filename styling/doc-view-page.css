@@ -17,7 +17,7 @@
     padding-top: .5rem;
     background-color: #ffffff;
     opacity: 98%;
-    z-index: 1000;
+    z-index: 10;
 }
 .doc-view-container {
   margin-left: 7%;
