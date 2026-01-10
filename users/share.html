@@ -345,7 +345,7 @@ async function handleShare() {
     preloader.style.display = "none";
 
     if (res.status === 200) {
-      document.getElementById("link").innerText = "/view?id=" + conID;
+      document.getElementById("link").innerText = "https://www.gopress.it.com/view?id=" + conID;
       document.getElementById("success_msg").style.opacity = 1;
       conID = "";
       file_ext = "";
