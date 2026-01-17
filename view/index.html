@@ -114,7 +114,7 @@ var UserReaction = "";
 //};
 
 function goShare() {
-  if(localStorage.getItem("userId"))  {
+  if(localStorage.getItem("loginToken"))  {
     if(window.innerWidth < 800)
       window.location.href = "/users/share-s.html";
     else
@@ -230,7 +230,7 @@ async function fetchComments() {
   fetch('https://i-press-backend-production.up.railway.app/files/getcomments', {    
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
     contentid: value
@@ -259,8 +259,8 @@ function signOut() {
 async function handlePost() {
   //event.preventDefault(); // stop form from reloading the page
   const commenttext = document.getElementById("comment").value;
-  const user = localStorage.getItem("userId");
   const preloader = document.getElementById("loading2");
+  const token = localStorage.getItem("loginToken");
   preloader.style.display = "flex";
 
   try {
@@ -268,9 +268,10 @@ async function handlePost() {
     const res = await fetch("https://i-press-backend-production.up.railway.app/files/postcomment", {      
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({ userid: user, contid: value, comment: commenttext })
+      body: JSON.stringify({ contid: value, comment: commenttext })
     });
 
     if (res.status === 200) {
@@ -340,24 +341,23 @@ async function fetchUserReaction() {
 
   const like_btn = document.getElementById("like_btn");
   const dislike_btn = document.getElementById("dislike_btn");
+  const token = localStorage.getItem("loginToken");
 
   like_btn.className = "react-btn like-black";
   dislike_btn.className = "react-btn dislike-black";
 
 
-  if(localStorage.getItem("userId") !== null) {
-
-  const UserId = localStorage.getItem("userId");
+  if(token !== null) {
 
   //fetch('http://localhost:3000/files/getuserreaction', {
   fetch('https://i-press-backend-production.up.railway.app/files/getuserreaction', {    
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    "Authorization": `Bearer ${token}`
   },
   body: JSON.stringify({
-    contentid: value,
-    userid: UserId
+    contentid: value
   })
 })
 .then(response => (response.json())
@@ -406,7 +406,7 @@ getSigninStatus();
 });
 
 function highlightButton(btn) {
-  if(localStorage.getItem("userId") !== null) {
+  if(localStorage.getItem("loginToken") !== null) {
     btn.style.backgroundColor = "#e0e1e3";
   }
 }
@@ -418,10 +418,10 @@ function normalizeButton(btn) {
 async function handleLike() {
   var op = "";
   const preloader = document.getElementById("loading1");
+  const token = localStorage.getItem("loginToken");
 
-    if(localStorage.getItem("userId") !== null) {
+    if(token !== null) {
     preloader.style.display = "flex";
-    const user = localStorage.getItem("userId");
 
       if(UserReaction === ""){
         op = "add";
@@ -437,9 +437,10 @@ async function handleLike() {
     const res = await fetch("https://i-press-backend-production.up.railway.app/files/adddeletereaction", {      
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({ userid: user, contentid: value, reaction: "like", operation: op })
+      body: JSON.stringify({ contentid: value, reaction: "like", operation: op })
     });
 
     if (res.status === 200) {
@@ -457,10 +458,10 @@ async function handleLike() {
 async function handleDislike() {
   var op = "";
   const preloader = document.getElementById("loading1");
+  const token = localStorage.getItem("loginToken");
 
-    if(localStorage.getItem("userId") !== null) {
+    if(token !== null) {
     preloader.style.display = "flex";    
-    const user = localStorage.getItem("userId");
 
       if(UserReaction === ""){
         op = "add";
@@ -476,9 +477,10 @@ async function handleDislike() {
     const res = await fetch("https://i-press-backend-production.up.railway.app/files/adddeletereaction", {      
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({ userid: user, contentid: value, reaction: "dislike", operation: op })
+      body: JSON.stringify({ contentid: value, reaction: "dislike", operation: op })
     });
 
     if (res.status === 200) {

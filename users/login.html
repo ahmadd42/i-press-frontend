@@ -106,10 +106,9 @@ async function handleLogin(event) {
     if (res.status === 200) {
       const data = await res.json();
 
-      // Save JWT access token & username
+      // Save JWT access token & displayname
       localStorage.setItem("loginToken", data.loginToken);
       localStorage.setItem("displayName", data.displayName);
-      localStorage.setItem("userId", data.userId);
 
       // Redirect to main page
       window.location.href = "/";

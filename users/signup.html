@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../styling/signup-page.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
     <link rel="icon" type="image/png" href="../graphics/favicon.png">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>      
   <title>goPress - New user signup</title>
 </head>
 <body>
@@ -35,6 +36,11 @@
 <div id="container"></div>  
 
   <script>
+    let captchaToken = null;
+
+function onCaptchaSuccess(token) {
+  captchaToken = token;
+}
 function loadTemplate() {    
 const con = document.getElementById("container");
 
@@ -92,6 +98,11 @@ async function handleSignup(event) {
 
   event.preventDefault(); // stop form from reloading the page
 
+  if (!captchaToken) {
+    alert("Please verify captcha");
+    return;
+  }
+
   const btn = document.getElementById("signup_btn");
   const email = document.getElementById("email").value;
   const country = document.getElementById("country").value;
@@ -109,7 +120,8 @@ async function handleSignup(event) {
     f_name: firstName,
     l_name: lastName,
     disp_name: displayName,
-    pwd: password
+    pwd: password,
+    c_token: captchaToken
   };
 
   try {
