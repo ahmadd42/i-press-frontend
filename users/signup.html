@@ -28,7 +28,6 @@
   <link rel="stylesheet" href="../styling/signup-page.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
     <link rel="icon" type="image/png" href="../graphics/favicon.png">
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>      
   <title>goPress - New user signup</title>
 </head>
 <body>
@@ -36,11 +35,7 @@
 <div id="container"></div>  
 
   <script>
-    let captchaToken = null;
 
-function onCaptchaSuccess(token) {
-  captchaToken = token;
-}
 function loadTemplate() {    
 const con = document.getElementById("container");
 
@@ -97,11 +92,7 @@ else {
 async function handleSignup(event) {
 
   event.preventDefault(); // stop form from reloading the page
-
-  if (!captchaToken) {
-    alert("Please verify captcha");
-    return;
-  }
+  document.getElementById("err-msg").innerText = "";
 
   const btn = document.getElementById("signup_btn");
   const email = document.getElementById("email").value;
@@ -121,7 +112,6 @@ async function handleSignup(event) {
     l_name: lastName,
     disp_name: displayName,
     pwd: password,
-    c_token: captchaToken
   };
 
   try {
@@ -133,9 +123,15 @@ async function handleSignup(event) {
       body: JSON.stringify(userData)
     });
 
-    if (res.status === 200) {
-      document.getElementById("congrats").innerText = "Congratulations " + displayName + " !";
-      document.getElementById("successModal").style.display = "flex";
+    if (res.status === 409) {
+      document.getElementById("err-msg").innerText = "This email address is already registered";
+      btn.textContent = "Sign up";
+      btn.disabled = false;
+    }
+    else if (res.status === 200) {
+      localStorage.setItem("email", email);
+      localStorage.setItem("fname", firstName);
+      window.location.href = "/i-press/users/verify-email.html";
     }
   } catch (err) {
     console.error("Login error:", err);

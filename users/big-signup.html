@@ -74,7 +74,6 @@
     <input type="password" id="password" name="password" style="margin-top: 2.6em;" tabindex="6" required minlength="8">  
     <span class="password-toggle" id="togglePassword" onclick="togglePwdView()"><i id="pwd-toggle" class="fa fa-eye"></i></span>
     </div>
-    <div class="cf-turnstile" data-sitekey="0x4AAAAAACNEQqMBCTAkomA-" data-callback="onCaptchaSuccess"></div>
     <button id="signup_btn" type="submit" tabindex="7">Sign Up</button>
  </div>
 
@@ -84,6 +83,7 @@
 
  <div class="inputs2">
     <input type="text" id="lastName" name="lastName" tabindex="2" required>
+    <p id="err-msg" class="error"></p>
  </div>
 
  </div>
@@ -93,16 +93,3 @@
         </div>
 
     <div class="ads-panel"></div>
-
-<!-- Success Modal -->
-  <div id="successModal" class="modal">
-    <div class="modal-content">
-      <h3 id="congrats"></h3>
-      <p>Your account has been created successfully.</p>
-      <div class="last-buttons">
-      <button class="close-btn" id="login_btn" onclick="loginClicked()">Sign in</button>
-      <button class="close-btn" id="home_btn" onclick="homeClicked()">Back to Home</button>
-
-      </div>
-    </div>
-  </div>

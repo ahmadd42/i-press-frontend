@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="">
+
+  <link rel="stylesheet" href="../styling/login-page.css">
+  <link rel="stylesheet" href="../styling/verify-email.css">
+  <link rel="stylesheet" href="../styling/signup-page.css">
+  <link rel="icon" type="image/png" href="../graphics/favicon.png">
+
+  <title>goPress - Verify your email</title>
+</head>
+<body>
+
+<div id="con" class="container">
+<div id="logo" class="logo-panel">
+    <img src="../graphics/logo-large.jpg">
+</div>
+<div id="verify" class="verify-panel">
+
+<!--  <div class="center"> -->
+    <form class="card" id="verifyForm" autocomplete="on" onsubmit="handleVerify(event)">
+      <h1 id="heading"></h1>
+      <p></p>
+      <p class="lead">Your account has been successfully created. Enter the code you received in your email to activate your account:</p>
+
+      <div style="margin-bottom:12px">
+        <input id="ver_code" name="ver-code" type="number" required>
+      </div>
+
+      <div class="actions">
+        <button id="submit_btn" type="submit" disabled>Verify</button>
+      </div>
+      </form>
+      <p></p>
+      <p id="errorMsg" class="error"></p>
+
+      <div class="bottom">Didn't get the email ? <span id="resend" onclick="handleResend()">Resend verification code</span></div>
+
+<!--  </div> -->
+</div>
+</div>
+<div id="ads" class="ads-panel"></div>
+
+<!-- Success Modal -->
+  <div id="successModal" class="modal">
+    <div class="modal-content">
+      <p>Your account is activated.</p>
+      <div class="last-buttons">
+      <button class="close-btn" id="login_btn" onclick="loginClicked()">Sign in</button>
+      <button class="close-btn" id="home_btn" onclick="homeClicked()">Back to Home</button>
+
+      </div>
+    </div>
+  </div>
+
+<!-- Modal displayed on attempts exhaustion -->
+  <div id="attemptModal" class="modal">
+    <div class="modal-content">
+      <h3>Too many attempts</h3>
+      <p>Your attempts to verify email have exhausted. Click on the "Resend code" link to receive a fresh code.</p>
+      <div class="last-buttons">
+      <button class="close-btn" id="close_btn" onclick="OKClicked()">OK</button>
+      </div>
+    </div>
+  </div>
+
+<!-- Modal displayed after resend code -->
+  <div id="resendModal" class="modal">
+    <div class="modal-content">
+      <h3>Verification code re-sent</h3>
+      <p>Verification code has been re-sent. Please check your email.</p>
+      <div class="last-buttons">
+      <button class="close-btn" id="close_btn" onclick="OKClicked()">OK</button>
+      </div>
+    </div>
+  </div>
+
+
+
+<script>
+  const ver_code = document.getElementById("ver_code");
+  const submit_btn = document.getElementById("submit_btn");
+  const usr_email = localStorage.getItem("email");
+  const f_name = localStorage.getItem("fname");
+  const attemptModal = document.getElementById("attemptModal");
+  const resendModal = document.getElementById("resendModal");
+  const login_btn = document.getElementById("login_btn");
+  const home_btn = document.getElementById("home_btn");
+
+  if(!usr_email) {
+    window.location.href = "/";
+  }
+  else {
+    localStorage.clear();
+    document.getElementById("heading").innerText = "Congratulations " + f_name + " !";
+  }
+
+const screen = (window.innerWidth < 1000) ? "small" : "big";
+
+if(screen === "small") {
+document.getElementById("con").className = "container-mobile";
+document.getElementById("logo").className = "logo-panel-mobile";
+document.getElementById("ads").className = "ads-panel-mobile";
+}
+
+  ver_code.addEventListener("input", (event) => {
+    if(event.target.value === "") submit_btn.disabled = true;
+    else submit_btn.disabled = false;
+  });
+
+  login_btn.addEventListener("click", (event) => {
+    window.location.href = "/users/login.html";
+  });
+
+  home_btn.addEventListener("click", (event) => {
+    window.location.href = "/";
+  });
+
+
+  function OKClicked() {
+    attemptModal.style.display = "none";
+    resendModal.style.display = "none";
+  }
+
+  async function handleVerify(event) {
+
+  event.preventDefault(); // stop form from reloading the page
+  submit_btn.disabled = true;
+  document.getElementById("errorMsg").innerText = "";
+
+  try {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/verifyemail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({email: usr_email, vcode: ver_code.value})
+    });
+
+    if (res.status === 200) {
+      ver_code.disabled = true;
+      submit_btn.disabled = true;                
+      document.getElementById("successModal").style.display = "flex";
+    }
+    else if (res.status === 429) {
+      ver_code.value = "";
+      attemptModal.style.display = "flex";  
+    }
+    else if (res.status === 400) {
+      document.getElementById("errorMsg").innerText = "Invalid code";
+      submit_btn.disabled = false;
+      return;
+    }
+
+  } catch (err) {
+    console.error("Login error:", err);
+    //errorMsg.textContent = "Network error.";
+  }
+}
+
+  async function handleResend() {
+  try {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/resendcode", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({email: usr_email})
+    });
+
+    if (res.status === 200) {                
+      document.getElementById("resendModal").style.display = "flex";
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    //errorMsg.textContent = "Network error.";
+  }
+
+  }
+</script>
+</body>
+</html>    

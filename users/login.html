@@ -26,10 +26,10 @@
   <link rel="stylesheet" href="../styling/login-page.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="icon" type="image/png" href="../graphics/favicon.png">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>      
 
   <title>goPress - User Login</title>
-  <script>
-  </script>
+  
 </head>
 <body>
 <div id="con" class="container">
@@ -55,6 +55,14 @@
         <span class="password-toggle" id="togglePassword" onclick="togglePwdView()"><i id="pwd-toggle" class="fa fa-eye"></i></span>
         </div>
       </div>
+<div
+  id="cf-captcha"
+  class="cf-turnstile"
+  data-sitekey="0x4AAAAAACNEQqMBCTAkomA-"
+  data-callback="onCaptchaSuccess"
+  data-expired-callback="onCaptchaExpired"
+  data-error-callback="onCaptchaError">
+</div>
 
       <div class="actions">
         <button id="submit_btn" type="submit">Sign in</button>
@@ -74,6 +82,15 @@
 <div id="ads" class="ads-panel"></div>
 
 <script>
+let captchaToken = null;
+
+function onCaptchaSuccess(token) {
+  captchaToken = token;
+}
+
+function onCaptchaExpired() {
+  captchaToken = null;
+}
 
 const screen = (window.innerWidth < 1000) ? "small" : "big";
 
@@ -85,6 +102,11 @@ document.getElementById("ads").className = "ads-panel-mobile";
 }
 async function handleLogin(event) {
   event.preventDefault(); // stop form from reloading the page
+
+    if (!captchaToken) {
+    alert("Please verify captcha");
+    return;
+  }
 
   const btn = document.getElementById("submit_btn");
   const email = document.getElementById("email").value;
@@ -100,11 +122,12 @@ async function handleLogin(event) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password, captchaToken })
     });
 
-    if (res.status === 200) {
       const data = await res.json();
+
+    if (res.status === 200) {
 
       // Save JWT access token & displayname
       localStorage.setItem("loginToken", data.loginToken);
@@ -116,10 +139,20 @@ async function handleLogin(event) {
       errorMsg.textContent = "Invalid credentials";
       btn.textContent = "Sign in";
       btn.disabled = false;
+      captchaToken = null;
+      turnstile.reset();
+    } else if (res.status === 402) {
+      if(!localStorage.getItem("email")) {
+      localStorage.setItem("email", email);
+      localStorage.setItem("fname", data.f_name);
+      }
+      window.location.href = "verify-email.html";
     } else {
       errorMsg.textContent = "Server error, try again later.";
       btn.textContent = "Sign in";
       btn.disabled = false;
+      captchaToken = null;
+      turnstile.reset();
     }
   } catch (err) {
     console.error("Login error:", err);
