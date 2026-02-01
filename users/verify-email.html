@@ -26,6 +26,8 @@
   <link rel="stylesheet" href="../styling/login-page.css">
   <link rel="stylesheet" href="../styling/verify-email.css">
   <link rel="stylesheet" href="../styling/signup-page.css">
+  <link rel="stylesheet" href="../styling/modal-window.css">
+  <link rel="stylesheet" href="../styling/printing-press-logo.css">
   <link rel="icon" type="image/png" href="../graphics/favicon.png">
 
   <title>goPress - Verify your email</title>
@@ -40,10 +42,7 @@
 
 <!--  <div class="center"> -->
     <form class="card" id="verifyForm" autocomplete="on" onsubmit="handleVerify(event)">
-      <h1 id="heading"></h1>
-      <p></p>
-      <p class="lead">Your account has been successfully created. Enter the code you received in your email to activate your account:</p>
-
+      <div id="desc"></div>
       <div style="margin-bottom:12px">
         <input id="ver_code" name="ver-code" type="number" required>
       </div>
@@ -65,7 +64,10 @@
 <!-- Success Modal -->
   <div id="successModal" class="modal">
     <div class="modal-content">
-      <p>Your account is activated.</p>
+      <div style="display: flex;">
+      <div class="favicon-div"></div>
+      <p style="margin-left: 1em;">Your account is activated.</p>
+      </div>
       <div class="last-buttons">
       <button class="close-btn" id="login_btn" onclick="loginClicked()">Sign in</button>
       <button class="close-btn" id="home_btn" onclick="homeClicked()">Back to Home</button>
@@ -77,7 +79,10 @@
 <!-- Modal displayed on attempts exhaustion -->
   <div id="attemptModal" class="modal">
     <div class="modal-content">
-      <h3>Too many attempts</h3>
+      <div style="display: flex;">
+      <div class="favicon-div"></div>
+      <h3 style="margin-left: 1em;">Too many attempts</h3>
+      </div>
       <p>Your attempts to verify email have exhausted. Click on the "Resend code" link to receive a fresh code.</p>
       <div class="last-buttons">
       <button class="close-btn" id="close_btn" onclick="OKClicked()">OK</button>
@@ -88,7 +93,10 @@
 <!-- Modal displayed after resend code -->
   <div id="resendModal" class="modal">
     <div class="modal-content">
-      <h3>Verification code re-sent</h3>
+      <div style="display: flex;">
+      <div class="favicon-div"></div>
+      <h3 style="margin-left: 1em;">Verification code re-sent</h3>
+      </div>
       <p>Verification code has been re-sent. Please check your email.</p>
       <div class="last-buttons">
       <button class="close-btn" id="close_btn" onclick="OKClicked()">OK</button>
@@ -103,6 +111,7 @@
   const submit_btn = document.getElementById("submit_btn");
   const usr_email = localStorage.getItem("email");
   const f_name = localStorage.getItem("fname");
+  const op = localStorage.getItem("op");
   const attemptModal = document.getElementById("attemptModal");
   const resendModal = document.getElementById("resendModal");
   const login_btn = document.getElementById("login_btn");
@@ -112,8 +121,15 @@
     window.location.href = "/";
   }
   else {
+    let html = "";
     localStorage.clear();
-    document.getElementById("heading").innerText = "Congratulations " + f_name + " !";
+    if(op === "activate") {
+    html = `<h1>Congratulations ${f_name} !</h1><p></p><p class="lead">Your account has been successfully created. Enter the code you received in your email to activate your account:</p>`;
+    }
+    else {
+    html = `<p class="lead">To reset your password, enter the code you received in your email:</p>`;
+    }
+    document.getElementById("desc").innerHTML = html;
   }
 
 const screen = (window.innerWidth < 1000) ? "small" : "big";
@@ -130,7 +146,7 @@ document.getElementById("ads").className = "ads-panel-mobile";
   });
 
   login_btn.addEventListener("click", (event) => {
-    window.location.href = "/users/login.html";
+    window.location.href = "login.html";
   });
 
   home_btn.addEventListener("click", (event) => {
@@ -159,9 +175,15 @@ document.getElementById("ads").className = "ads-panel-mobile";
     });
 
     if (res.status === 200) {
+      if(op === "activate") {
       ver_code.disabled = true;
       submit_btn.disabled = true;                
       document.getElementById("successModal").style.display = "flex";
+      }
+      else {
+        localStorage.setItem("email",usr_email);
+        window.location.href = "reset-pwd.html";
+      }
     }
     else if (res.status === 429) {
       ver_code.value = "";

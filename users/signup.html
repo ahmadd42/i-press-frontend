@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="../styling/landing-page.css">
   <link rel="stylesheet" href="../styling/landing-page-mobile.css">
   <link rel="stylesheet" href="../styling/signup-page.css">
+  <link rel="stylesheet" href="../styling/modal-window.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
     <link rel="icon" type="image/png" href="../graphics/favicon.png">
   <title>goPress - New user signup</title>
@@ -131,7 +132,8 @@ async function handleSignup(event) {
     else if (res.status === 200) {
       localStorage.setItem("email", email);
       localStorage.setItem("fname", firstName);
-      window.location.href = "/i-press/users/verify-email.html";
+      localStorage.setItem("op", "activate");
+      window.location.href = "verify-email.html";
     }
   } catch (err) {
     console.error("Login error:", err);

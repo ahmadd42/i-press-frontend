@@ -68,7 +68,7 @@
 h1{margin:0 0 8px;font-size:1.1em; font-family:Arial, Helvetica, sans-serif;}
 p.lead{margin:0 0 18px;color:var(--muted);font-size:.9em; font-family:Arial, Helvetica, sans-serif}
 label{display:block;font-size:1em;font-weight:bold;margin-bottom:6px}
-input[type=text],[type=password]{width:95%;padding:10px 12px;border:1px solid #e6e7eb;border-radius:8px;font-size:14px}
+input[type=text],[type=password],[type=email]{width:95%;padding:10px 12px;border:1px solid #615e5f;border-radius:8px;font-size:14px}
 .row{display:flex;gap:12px;align-items:center}
 .actions{margin-top:18px}
 button[type=submit]{width:100%;padding:10px 12px;border-radius:8px;border:0;background-color:#007bff;color:white;font-weight:600;font-size:15px;cursor:pointer}
@@ -96,4 +96,13 @@ button[type=submit]{width:100%;padding:10px 12px;border-radius:8px;border:0;back
   transform: translateY(-50%);
   cursor: pointer;
   z-index: 10;
+}
+.forgot {
+font-family:Arial, Helvetica, sans-serif;
+font-size: .9em;
+font-weight: bold;
+color: #1215a7;
+margin-top: .7em;
+margin-left: 5em;
+cursor: pointer;
 }

@@ -1,0 +1,9 @@
+.favicon-div {
+    margin-top: 1em;
+    width: 1em;
+    height: 1em;
+    background: url('../graphics/favicon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}

@@ -45,7 +45,7 @@
 
       <div style="margin-bottom:12px">
         <label for="email">Email</label>
-        <input id="email" name="email" type="text" inputmode="email" autocomplete="email" required placeholder="your email address">
+        <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required placeholder="your email address">
       </div>
 
       <div style="margin-bottom:6px">
@@ -67,8 +67,10 @@
       <div class="actions">
         <button id="submit_btn" type="submit">Sign in</button>
       </div>
-
+      <div style="display: flex;">
       <p class="note">By signing in you agree to our terms of service.</p>
+      <span id="forgot" class="forgot">Forgot password</span>
+      </div>
       <p></p>
       <p id="errorMsg" class="error"></p>
     </form>
@@ -83,6 +85,7 @@
 
 <script>
 let captchaToken = null;
+const forgot = document.getElementById("forgot");
 
 function onCaptchaSuccess(token) {
   captchaToken = token;
@@ -100,6 +103,12 @@ document.getElementById("logo").className = "logo-panel-mobile";
 document.getElementById("login").className = "login-panel-mobile";
 document.getElementById("ads").className = "ads-panel-mobile";
 }
+
+forgot.addEventListener("click", (event) => {
+    window.location.href = "enter-email.html";
+  });
+
+
 async function handleLogin(event) {
   event.preventDefault(); // stop form from reloading the page
 

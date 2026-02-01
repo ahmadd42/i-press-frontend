@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="">
+
+  <link rel="stylesheet" href="../styling/enter-email.css">
+  <link rel="stylesheet" href="../styling/printing-press-logo.css">
+  <link rel="icon" type="image/png" href="../graphics/favicon.png">
+
+  <title>Enter your email</title>
+  
+</head>
+<body>
+    
+<div style="display: flex;">
+    <div class="favicon-div"></div>
+    <div class="paragraph-div">Enter your email address registered with goPress:</div>
+</div>
+<form id="ver-form" onsubmit="sendCode(event)">
+<div class="input-div">
+    <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required>
+    <button id="submit_btn" type="submit">Send verification code</button>
+<div id="err-div" class="err-div">
+    The email address you entered was not found in our database
+</div>
+
+</div>
+</form>
+
+<div id="ads" class="ads-panel"></div>
+
+<script>
+const usr_email = document.getElementById("email");
+const err_div = document.getElementById("err-div");
+
+async function sendCode(e) {
+    e.preventDefault();
+    err_div.style.opacity = "0";
+    document.getElementById("submit_btn").textContent = ". . . . . . .";
+
+  try {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/resendcode", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({email: usr_email.value})
+    });
+
+    if (res.status === 400) {
+        err_div.style.opacity = "1";
+        document.getElementById("submit_btn").textContent = "Send verification code";
+        return
+    }
+    else if (res.status === 200) {                
+      localStorage.setItem("email", usr_email.value);
+      localStorage.setItem("op", "reset");
+      window.location.href = "verify-email.html";
+    }
+  } catch (err) {
+    console.error("Error sending code:", err);
+    //errorMsg.textContent = "Network error.";
+  }
+
+  }
+    
+</script>
+</body>
+</html>    
