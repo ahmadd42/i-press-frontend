@@ -64,7 +64,7 @@
       <div class="actions">
         <button id="submit_btn" type="submit">Reset</button>
       </div>
-
+<div class="loader" id="loading"><img src="../graphics/loading-dots.gif" /></div>     
       <p></p>
       <p id="errorMsg" class="error"></p>
     </form>
@@ -97,6 +97,7 @@ const con_pass = document.getElementById("con-password");
 const err = document.getElementById("errorMsg");
 const login_btn = document.getElementById("login_btn");
 const home_btn = document.getElementById("home_btn");
+const dots = document.getElementById("loading");
 
 if(!usr_email) {
     window.location.href = "/";
@@ -136,6 +137,8 @@ async function changePwd(e) {
       return;
     }
 
+    dots.style.display = "flex";
+
   try {
     const res = await fetch("https://i-press-backend-production.up.railway.app/files/resetpass", {
       method: "POST",
@@ -144,6 +147,8 @@ async function changePwd(e) {
       },
       body: JSON.stringify({email: usr_email, new_pass: pass.value})
     });
+
+        dots.style.display = "none";
 
     if (res.status === 200) {                
       document.getElementById("successModal").style.display = "flex";

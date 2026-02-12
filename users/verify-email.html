@@ -50,11 +50,12 @@
       <div class="actions">
         <button id="submit_btn" type="submit" disabled>Verify</button>
       </div>
+      <div class="loader" id="loading"><img src="../graphics/loading-dots.gif" /></div>     
       </form>
       <p></p>
       <p id="errorMsg" class="error"></p>
 
-      <div class="bottom">Didn't get the email ? <span id="resend" onclick="handleResend()">Resend verification code</span></div>
+      <div class="bottom">Didn't get the email ? Check your mailbox's Spam folder, or <span id="resend" onclick="handleResend()">Resend verification code</span></div>
 
 <!--  </div> -->
 </div>
@@ -116,6 +117,7 @@
   const resendModal = document.getElementById("resendModal");
   const login_btn = document.getElementById("login_btn");
   const home_btn = document.getElementById("home_btn");
+  const dots = document.getElementById("loading");
 
   if(!usr_email) {
     window.location.href = "/";
@@ -163,6 +165,7 @@ document.getElementById("ads").className = "ads-panel-mobile";
 
   event.preventDefault(); // stop form from reloading the page
   submit_btn.disabled = true;
+  dots.style.display = "flex";
   document.getElementById("errorMsg").innerText = "";
 
   try {
@@ -173,6 +176,8 @@ document.getElementById("ads").className = "ads-panel-mobile";
       },
       body: JSON.stringify({email: usr_email, vcode: ver_code.value})
     });
+
+      dots.style.display = "none";
 
     if (res.status === 200) {
       if(op === "activate") {
@@ -190,7 +195,7 @@ document.getElementById("ads").className = "ads-panel-mobile";
       attemptModal.style.display = "flex";  
     }
     else if (res.status === 400) {
-      document.getElementById("errorMsg").innerText = "Invalid code";
+      document.getElementById("errorMsg").innerText = "Invalid or expired code";
       submit_btn.disabled = false;
       return;
     }

@@ -73,6 +73,7 @@
       </div>
       <p></p>
       <p id="errorMsg" class="error"></p>
+      <div class="loader" id="loading"><img src="../graphics/loading-dots.gif" /></div>     
     </form>
 <!--  </div> -->
     <div class="signup-div">
@@ -81,11 +82,14 @@
     </div>    
 </div>
 </div>
+
+
 <div id="ads" class="ads-panel"></div>
 
 <script>
 let captchaToken = null;
 const forgot = document.getElementById("forgot");
+const dots = document.getElementById("loading");
 
 function onCaptchaSuccess(token) {
   captchaToken = token;
@@ -123,6 +127,7 @@ async function handleLogin(event) {
   const errorMsg = document.getElementById("errorMsg");
 
   btn.textContent = ". . . . . . .";
+dots.style.display = "flex";
   btn.disabled = true;
 
   try {
@@ -147,6 +152,7 @@ async function handleLogin(event) {
     } else if (res.status === 401) {
       errorMsg.textContent = "Invalid credentials";
       btn.textContent = "Sign in";
+      dots.style.display = "none";
       btn.disabled = false;
       captchaToken = null;
       turnstile.reset();
@@ -159,6 +165,7 @@ async function handleLogin(event) {
     } else {
       errorMsg.textContent = "Server error, try again later.";
       btn.textContent = "Sign in";
+      dots.style.display = "none";
       btn.disabled = false;
       captchaToken = null;
       turnstile.reset();

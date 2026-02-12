@@ -246,6 +246,7 @@ function getSigninStatus() {
 
 function signOut() {
   localStorage.clear();
+  document.getElementById("top-menu").style.opacity = 0;
   getSigninStatus();
 }    
 
