@@ -403,6 +403,7 @@ side_nav.classList.toggle("active");
 };
 
 window.addEventListener("storage", function (event) {
+  document.getElementById("top-menu").style.opacity = 0;  
 getSigninStatus();
 });
 

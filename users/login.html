@@ -160,6 +160,7 @@ dots.style.display = "flex";
       if(!localStorage.getItem("email")) {
       localStorage.setItem("email", email);
       localStorage.setItem("fname", data.f_name);
+      localStorage.setItem("op","activate");
       }
       window.location.href = "verify-email.html";
     } else {

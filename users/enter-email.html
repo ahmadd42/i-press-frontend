@@ -64,7 +64,7 @@ async function sendCode(e) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({email: usr_email.value})
+      body: JSON.stringify({email: usr_email.value, operation: "reset"})
     });
 
     if (res.status === 400) {

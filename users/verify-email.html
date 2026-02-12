@@ -50,12 +50,13 @@
       <div class="actions">
         <button id="submit_btn" type="submit" disabled>Verify</button>
       </div>
-      <div class="loader" id="loading"><img src="../graphics/loading-dots.gif" /></div>     
+      <div class="loader" id="loading" style="margin-top: 1.5em;"><img src="../graphics/loading-dots.gif" /></div>     
       </form>
       <p></p>
       <p id="errorMsg" class="error"></p>
 
       <div class="bottom">Didn't get the email ? Check your mailbox's Spam folder, or <span id="resend" onclick="handleResend()">Resend verification code</span></div>
+      
 
 <!--  </div> -->
 </div>
@@ -213,7 +214,7 @@ document.getElementById("ads").className = "ads-panel-mobile";
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({email: usr_email})
+      body: JSON.stringify({email: usr_email, operation: op})
     });
 
     if (res.status === 200) {                
