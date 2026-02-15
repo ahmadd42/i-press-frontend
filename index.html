@@ -75,7 +75,7 @@ if(window.innerWidth < 800) {
     fetch("small-main.html")
         .then(res => res.text())
         .then(html => {
-            con.innerHTML = html;   // Template is now in place
+            con.innerHTML += html;   // Template is now in place
             getSigninStatus();
             fetchFeeds();
         });
@@ -85,7 +85,7 @@ else {
       fetch("big-main.html")
         .then(res => res.text())
         .then(html => {
-            con.innerHTML = html;   // Template is now in place
+            con.innerHTML += html;   // Template is now in place
             getSigninStatus();
             fetchFeeds();
         });
@@ -125,6 +125,7 @@ async function fetchFeeds() {
   const div = document.createElement('div');
   div.className = (screen === "big") ? 'doc-item' : 'doc-item-mobile';
   var HTMLString = '';
+
           if(record.Extension === ".pdf") {
           //let prevURL = `http://192.168.100.99:3000/files/getContent/${record.ContentID}.jpg/${screen}`;
           let prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}.jpg/${screen}`;
@@ -164,36 +165,15 @@ async function fetchFeeds() {
           HTMLString += `<div class="doc-desc">`;
           }
           HTMLString += `<div><a href="view?id=${record.ContentID}"><p class="grid-text title"><b>${record.DocumentTitle}</b></p></a></div>
-          <div><span class="descr">
+            <div><span class="descr">
             ${isTruncated ? shortText + '...' : record.Description}
-            </span>
-            ${isTruncated ? '<a href="#" class="toggle-link">Read more</a>' : ''}
-            </div>
+              </span></div>
           <div><p class="grid-text"><b>Author: </b>${record.Author}</p></div>
           <div><p class="grid-text"><b>Shared: </b>${elapsedTime}</p></div>
         </div>`
 
         div.innerHTML = HTMLString;
           
-    if (isTruncated) {
-    const toggleLink = div.querySelector('.toggle-link');
-    const textSpan = div.querySelector('.descr');
-
-    toggleLink.addEventListener('click', function (e) {
-      e.preventDefault();
-      textSpan.style.opacity = 0;
-      toggleLink.style.opacity = 0;
-      setTimeout(() => {
-      const isExpanded = toggleLink.textContent === 'Read less';
-      textSpan.textContent = isExpanded ? shortText + '...' : record.Description;
-      toggleLink.textContent = isExpanded ? 'Read more' : 'Read less';
-      textSpan.style.opacity = 1;
-      toggleLink.style.opacity = 1;
-      }, 200); // match the transition 
-
-    });
-  }
-
   /// Code to play video preview on mouse over
 //const previewVideo = (screen === "big") ? div.querySelector(".video-prev") : div.querySelector(".video-prev-mobile");
 const previewVideo = div.querySelector(".inline-video");

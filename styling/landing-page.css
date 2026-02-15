@@ -1,6 +1,6 @@
-body {
+/*body {
     overflow: scroll;
-}
+}*/
 .container {
       display: flex;
       justify-content: space-between;
@@ -276,15 +276,15 @@ font-size: 13px;
   overflow-y: auto;
 }
 .content-icon {
-    width: 13em;
-    height: 15em;
+    width: 8em;
+    height: 11em;
     align-items: center;
     cursor: pointer;
     border: solid 3px #c3b278;
     transition: transform 0.4s ease-in-out;
 }
 .content-icon:hover {
-    transform: scale(2);
+    transform: scale(1.6);
   }
 
 .content-icon.document {
@@ -297,15 +297,15 @@ font-size: 13px;
     background-image: url("../graphics/video-icon.jpg");
 }
 .video-prev {
-    width: 15em;
-    height: 10em;
+    width: 12em;
+    height: 7em;
     cursor: pointer;
     border: solid 3px #c3b278;
     background-color: #000;
     transition: transform 0.4s ease-in-out;
 }
 .video-prev:hover {
-    transform: scale(2);
+    transform: scale(1.6);
   }
 .inline-video {
   width: 100%;
@@ -342,17 +342,22 @@ font-size: 13px;
     color: #343430;
 }
 .doc-container {
-  margin-left: 8%;
+  display: grid;
+  grid-template-columns: auto auto;    
   margin-top: 11%;
+  margin-left: 8%;
+  padding-top: 1em;
+  padding-left: 1.5em;
   border: none;
   width: 77%;
   height: 91%;
   overflow-y: auto;
+  z-index: 100;
 }
 .doc-item {
-    width: 90%;
     display: flex;
-    gap: 1em;
+    width: 96%;
+    gap: .5em;
     border: solid 1px;
     border-radius: 20px;
     border-color: #898980;
@@ -372,12 +377,12 @@ font-size: 13px;
     width: 57%;
 }
 .doc-img {
-    padding-left: 6em;
+    padding-left: 1em;
 /*    padding-top: .1em;*/
     width: 28%;
 }
 .video-prev-container {
-    padding-left: 5em;
+    padding-left: 1em;
 /*    padding-top: 1em;*/
     width: 43%;
     height: 60%;
@@ -430,4 +435,13 @@ font-size: 13px;
     font-size: .8em;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
+}
+.top-heading {
+    margin-top: 10%;
+    margin-left: 11%;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: .9em;
+    font-weight: bold;
+    color: #1b4673;
+    text-decoration: underline;
 }

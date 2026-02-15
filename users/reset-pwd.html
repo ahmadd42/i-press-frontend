@@ -23,7 +23,6 @@
   <meta name="twitter:description" content="">
   <meta name="twitter:image" content="">
 
-  <link rel="stylesheet" href="../styling/verify-email.css">
   <link rel="stylesheet" href="../styling/login-page.css">
   <link rel="stylesheet" href="../styling/modal-window.css">
   <link rel="stylesheet" href="../styling/printing-press-logo.css">
@@ -38,24 +37,23 @@
 <div id="logo" class="logo-panel">
     <img src="../graphics/logo-large.jpg">
 </div>
-<div id="reset" class="login-panel" style="margin-top: 3em;">
-
+<div id="reset" class="login-panel">
 <!--  <div class="center"> -->
     <form class="card" id="resetForm" autocomplete="on" onsubmit="changePwd(event)">
       <h1 style="margin-bottom: 1.8em;">Reset password</h1>
 
-      <div style="display:flex;margin-bottom:1.3em;">
+      <div style="margin-bottom:1.3em;">
         <div style="margin-top:.5em;width:12em"><label for="password">Enter new password:</label></div>
         <div class="password-container">
-        <input style="width: 18em;" id="password" name="password" type="password" autocomplete="current-password" required placeholder="••••••••">
+        <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="••••••••">
         <span class="password-toggle" id="togglePassword1" onclick="togglePwdView(event)"><i id="pwd-toggle1" class="fa fa-eye"></i></span>
         </div>
       </div>
 
-      <div style="display:flex;margin-bottom:1.5em;">
+      <div style="margin-bottom:1.5em;">
         <div style="margin-top:.5em;width:12em"><label for="password">Confirm new password:</label></div>
         <div class="password-container">
-        <input style="width: 18em;" id="con-password" name="con-password" type="password" autocomplete="current-password" required placeholder="••••••••">
+        <input id="con-password" name="con-password" type="password" autocomplete="current-password" required placeholder="••••••••">
         <span class="password-toggle" id="togglePassword2" onclick="togglePwdView(event)"><i id="pwd-toggle2" class="fa fa-eye"></i></span>
         </div>
       </div>
@@ -98,6 +96,16 @@ const err = document.getElementById("errorMsg");
 const login_btn = document.getElementById("login_btn");
 const home_btn = document.getElementById("home_btn");
 const dots = document.getElementById("loading");
+
+const screen = (window.innerWidth < 1000) ? "small" : "big";
+
+if(screen === "small") {
+document.getElementById("con").className = "container-mobile";
+document.getElementById("logo").className = "logo-panel-mobile";
+document.getElementById("reset").className = "login-panel-mobile";
+document.getElementById("ads").className = "ads-panel-mobile";
+}
+
 
 if(!usr_email) {
     window.location.href = "/";

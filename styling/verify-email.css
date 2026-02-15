@@ -1,6 +1,5 @@
 body {
       font-family: Arial, sans-serif;
-      background: #fbfbf7;
     }
 .verify-panel {
     margin-top: 3em;
@@ -49,7 +48,7 @@ body {
     height: 85%;
     width: 95%;
     padding-top: 1em;
-    padding-left: .5em;
+    padding-left: .1em;
     padding-bottom: 1em;
     border-radius: 10px;
 }
