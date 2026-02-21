@@ -120,7 +120,8 @@ async function fetchFeeds() {
     const isTruncated = record.Description.length > 150;
     const shortText = record.Description.slice(0, 150);
     //const conURL = `http://192.168.100.99:3000/files/getContent/${record.ContentID}${record.Extension}/${screen}`
-    const conURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}${record.Extension}/${screen}`;
+    //const conURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}${record.Extension}/${screen}`;
+    const conURL = `https://preview.gopress.online/preview/${record.ContentID}${record.Extension}`;
 
   const div = document.createElement('div');
   div.className = (screen === "big") ? 'doc-item' : 'doc-item-mobile';
@@ -128,20 +129,12 @@ async function fetchFeeds() {
 
           if(record.Extension === ".pdf") {
           //let prevURL = `http://192.168.100.99:3000/files/getContent/${record.ContentID}.jpg/${screen}`;
-          let prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}.jpg/${screen}`;
+          //let prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}.jpg/${screen}`;
+          let prevURL = `https://preview.gopress.online/preview/${record.ContentID}.jpg`;
 
-          let exists = await resourceExists(prevURL);
-
-          if(exists === false) {
-          HTMLString += (screen === "big") 
-                        ? `<div class="doc-img"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon bg-img-setting" style="background-image: url('graphics/pdf-icon.jpg');"></div>` 
-                        : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon-mobile bg-img-setting" style="background-image: url('graphics/pdf-icon.jpg');"></div>`;
-          }
-          else {
           HTMLString += (screen === "big") 
                         ? `<div class="doc-img"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon bg-img-setting" style="background-image: url('${prevURL}');"></div>` 
                         : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon-mobile bg-img-setting" style="background-image: url('${prevURL}');"></div>`;
-          }
         }
           else if(record.Extension === ".jpg" || record.Extension === ".jpeg" || record.Extension === ".gif" || record.Extension === ".png" || record.Extension === ".tiff") {
                 HTMLString += (screen === "big") 

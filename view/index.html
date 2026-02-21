@@ -209,12 +209,40 @@ const extension = data[0].ext;
 const dld_status = data[0].can_download;
 const uploader = data[0].uploader;
 const title = data[0].title;
+const des = data[0].Description;
+const isTruncated = des.length > 300;
+const shortText = des.slice(0, 300);
 //const docURL = `http://localhost:3000/files/getContent/${value}${extension}/${screen}`;
 const docURL = `https://i-press-backend-production.up.railway.app/files/getContent/${value}${extension}/${screen}`;
 document.getElementById("doc-view-panel").innerHTML = generateViewerHTML(docURL, extension, dld_status);
-//})
 document.getElementById("con_title").innerText = title;
 document.getElementById("uploader").innerText = uploader;
+document.getElementById("desc-box").innerHTML = `
+<span id="descr">
+${isTruncated ? shortText + '...' : des}
+</span>
+${isTruncated ? '<a href="#" id="toggle-link">Read more</a>' : ''}
+`;
+
+    if (isTruncated) {
+    const toggleLink = document.getElementById('toggle-link');
+    const textSpan = document.getElementById('descr');
+
+    toggleLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      textSpan.style.opacity = 0;
+      toggleLink.style.opacity = 0;
+      setTimeout(() => {
+      const isExpanded = toggleLink.textContent === 'Read less';
+      textSpan.textContent = isExpanded ? shortText + '...' : des;
+      toggleLink.textContent = isExpanded ? 'Read more' : 'Read less';
+      textSpan.style.opacity = 1;
+      toggleLink.style.opacity = 1;
+      }, 200); // match the transition 
+
+    });
+  }
+
 })
 .catch(error => {
   console.error('Error:', error);
