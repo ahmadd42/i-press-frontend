@@ -213,7 +213,11 @@ const des = data[0].Description;
 const isTruncated = des.length > 300;
 const shortText = des.slice(0, 300);
 //const docURL = `http://localhost:3000/files/getContent/${value}${extension}/${screen}`;
-const docURL = `https://i-press-backend-production.up.railway.app/files/getContent/${value}${extension}/${screen}`;
+if(extension === ".jpg" || extension === ".jpeg" || extension === ".gif" || extension === ".png" || extension === ".tiff") 
+  docURL = `https://preview.gopress.online/preview/${value}${extension}`;
+else  
+  docURL = `https://i-press-backend-production.up.railway.app/files/getContent/${value}${extension}/${screen}`;
+
 document.getElementById("doc-view-panel").innerHTML = generateViewerHTML(docURL, extension, dld_status);
 document.getElementById("con_title").innerText = title;
 document.getElementById("uploader").innerText = uploader;
