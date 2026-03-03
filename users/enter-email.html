@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="../styling/enter-email.css">
   <link rel="stylesheet" href="../styling/printing-press-logo.css">
   <link rel="icon" type="image/png" href="../graphics/favicon.png">
+  <script src="../assets/enter-email.min.js" defer></script>
 
   <title>Enter your email</title>
   
@@ -36,7 +37,7 @@
     <div class="favicon-div"></div>
     <div class="paragraph-div">Enter your email address registered with goPress:</div>
 </div>
-<form id="ver-form" onsubmit="sendCode(event)">
+<form id="ver-form">
 <div class="input-div">
     <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required>
     <button id="submit_btn" type="submit">Send verification code</button>
@@ -49,41 +50,5 @@
 
 <div id="ads" class="ads-panel"></div>
 
-<script>
-const usr_email = document.getElementById("email");
-const err_div = document.getElementById("err-div");
-
-async function sendCode(e) {
-    e.preventDefault();
-    err_div.style.opacity = "0";
-    document.getElementById("submit_btn").textContent = ". . . . . . .";
-
-  try {
-    const res = await fetch("https://i-press-backend-production.up.railway.app/files/resendcode", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({email: usr_email.value, operation: "reset"})
-    });
-
-    if (res.status === 400) {
-        err_div.style.opacity = "1";
-        document.getElementById("submit_btn").textContent = "Send verification code";
-        return
-    }
-    else if (res.status === 200) {                
-      localStorage.setItem("email", usr_email.value);
-      localStorage.setItem("op", "reset");
-      window.location.href = "verify-email.html";
-    }
-  } catch (err) {
-    console.error("Error sending code:", err);
-    //errorMsg.textContent = "Network error.";
-  }
-
-  }
-    
-</script>
 </body>
 </html>    

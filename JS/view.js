@@ -1,0 +1,485 @@
+  const screen = (window.innerWidth < 1000) ? "small" : "big";
+  const logout = document.getElementById("logout");
+  const share_btn = document.getElementById("share_btn");
+  const like_btn = document.getElementById("like_btn");
+  const dislike_btn = document.getElementById("dislike_btn");
+
+function getElapsedTime(GivenDatetime) {
+
+var msg = "";
+const now = new Date();
+const givenDate = new Date(GivenDatetime);  // your given date-time
+
+const diffMs = now - givenDate;  // difference in milliseconds
+
+// Convert milliseconds to more useful units:
+const diffSeconds = Math.floor(diffMs / 1000);
+const diffMinutes = Math.floor(diffMs / (1000 * 60));
+const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+const diffMonths = Math.floor(diffMs / (1000 * 60 * 60 * 24 * 30));
+const diffYears = (diffMonths / 12).toFixed(1);
+
+if(diffMinutes <= 60) { msg = diffMinutes + " minute" + (diffMinutes > 1 ? "s" : "") + " ago"; }
+else if(diffHours <= 24) { msg = diffHours + " hour" + (diffHours > 1 ? "s" : "") + " ago"; }
+else if(diffDays <= 30) { msg = diffDays + " day" + (diffDays > 1 ? "s" : "") + " ago"; }
+else if(diffMonths <= 12) { msg = diffMonths + " month" + (diffMonths > 1 ? "s" : "") + " ago"; }
+else { msg = diffYears + " year" + (diffYears > 1 ? "s" : "") + " ago"; }
+
+return msg;
+
+}
+
+
+function loadContent() {
+
+  if(screen === "small") {
+    window.location.href = "index-s.html";
+  }
+
+  getSigninStatus();
+  fetchDocument();
+  fetchComments();
+  fetchLikes();
+  fetchDislikes();
+}
+
+const params = new URLSearchParams(window.location.search);
+const value = params.get("id"); // replace with actual param name
+var basicInfo;
+var UserReaction = "";
+
+//document.getElementById("home_btn").onclick = () => {
+//window.location.href = "/i-press";
+//};
+
+function goShare() {
+  if(localStorage.getItem("loginToken"))  {
+    if(window.innerWidth < 800)
+      window.location.href = "../users/share-s.html";
+    else
+      window.location.href = "../users/share.html";
+  }
+}
+
+function getSigninStatus() {
+  const profile_area = document.getElementById("profile");
+  const display_name = localStorage.getItem("displayName");
+  const comm_panel = document.getElementById("comm_input");
+
+  if (display_name) {
+    profile_area.className = "me";
+    profile_area.innerHTML = `<button id="profile_btn">Me</button>`;
+    document.getElementById("disp_name").innerHTML = display_name;
+    comm_panel.innerHTML = `<label id="who"><b>${display_name}:</b></label>
+        <textarea class="comment-box" id="comment" name="user_comments" rows="1" cols="30" placeholder="Add a public comment"></textarea>
+        <button id="post_btn" class="post-btn">Post</button>`;  
+  }
+  else {
+    profile_area.className = "signin";
+    profile_area.innerHTML = `<a href="../users/login.html">Sign in to get personalized feeds, and to upload and engage with the content</a>`;
+    comm_panel.innerHTML = "";
+  }
+          fetchUserReaction();
+}
+
+function disableIframeContextMenu() {
+        const iframe = document.getElementById("docViewer"); // Replace 'myIframe' with your iframe's ID
+        if (iframe && iframe.contentWindow && iframe.contentWindow.document) {
+            iframe.contentWindow.document.addEventListener("contextmenu", function(e) {
+                e.preventDefault(); // Prevent default context menu
+            }, false);
+        }
+    }
+    // Call this function after the iframe content has loaded
+    window.addEventListener("load", disableIframeContextMenu);
+
+function generateViewerHTML(path, ext, d_status) {
+var viewer_html = "";
+
+if(ext === ".pdf") {
+path += (d_status === 0) ? `#toolbar=0&navpanes=0&scrollbars=0` : '';
+viewer_html = `<iframe id="docViewer" class="doc-viewer pdf-frame" src="${path}" frameborder="0" oncontextmenu="return false"></iframe>`;
+if(d_status === 0) {
+  viewer_html += `<div id="overlay" 
+    style="position: absolute; left: 7%; top: 5%; width:76vw; height:93vh;"
+    oncontextmenu="return false" 
+    onmousedown="return false" 
+    onselectstart="return false"
+    >
+  </div>`;
+}
+}
+else if(ext === ".jpg" || ext === ".jpeg" || ext === ".gif" || ext === ".png" || ext === ".tiff") {
+
+viewer_html = `<div id="viewerContainer" style="margin-top:10px; padding-left: 1.5em; width:82%; 
+height:75%;"><img id="docViewer" src="${path}" style="width:100%;"`;
+
+viewer_html += (d_status === 0) ? ` oncontextmenu="return false"></div>` : `></div>`;
+}
+
+else if(ext === ".mp3" || ext === ".mp4" || ext === ".mpeg") {
+
+viewer_html = (screen === "small") ? `<div class="video-wrapper-mobile"><video id="myVideo" controls` : `<div class="video-wrapper"><video id="myVideo" controls`;
+viewer_html += (d_status === 0) ? ` controlsList="nodownload" oncontextmenu="return false"` : ``;  
+viewer_html += ` autoplay><source src="${path}" type="video/mp4"></video></div>`;
+}
+
+return viewer_html;
+}
+
+async function fetchDocument() {  
+
+  //fetch('http://192.168.100.99:3000/files/getbasicinfo', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getbasicinfo', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contentid: value
+  })
+})
+.then(response => (response.json())
+
+)
+.then(data => {
+//document.getElementById("doc-panel").innerHTML = data[0].ext + "    " + data[0].can_download;
+const extension = data[0].ext;
+const dld_status = data[0].can_download;
+const uploader = data[0].uploader;
+const title = data[0].title;
+const des = data[0].Description;
+const isTruncated = des.length > 300;
+const shortText = des.slice(0, 300);
+//const docURL = `http://localhost:3000/files/getContent/${value}${extension}/${screen}`;
+if(extension === ".jpg" || extension === ".jpeg" || extension === ".gif" || extension === ".png" || extension === ".tiff") 
+  docURL = `https://preview.gopress.online/preview/${value}${extension}`;
+else  
+  docURL = `https://i-press-backend-production.up.railway.app/files/getContent/${value}${extension}/${screen}`;
+
+document.getElementById("doc-view-panel").innerHTML = generateViewerHTML(docURL, extension, dld_status);
+document.getElementById("con_title").innerText = title;
+document.getElementById("uploader").innerText = uploader;
+document.getElementById("desc-box").innerHTML = `
+<span id="descr">
+${isTruncated ? shortText + '...' : des}
+</span>
+${isTruncated ? '<a href="#" id="toggle-link">Read more</a>' : ''}
+`;
+
+    if (isTruncated) {
+    const toggleLink = document.getElementById('toggle-link');
+    const textSpan = document.getElementById('descr');
+
+    toggleLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      textSpan.style.opacity = 0;
+      toggleLink.style.opacity = 0;
+      setTimeout(() => {
+      const isExpanded = toggleLink.textContent === 'Read less';
+      textSpan.textContent = isExpanded ? shortText + '...' : des;
+      toggleLink.textContent = isExpanded ? 'Read more' : 'Read less';
+      textSpan.style.opacity = 1;
+      toggleLink.style.opacity = 1;
+      }, 200); // match the transition 
+
+    });
+  }
+
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+}
+
+async function fetchComments() {
+
+  const container = document.getElementById("cmt_container");
+  container.innerHTML = ``;
+
+  //fetch('http://localhost:3000/files/getcomments', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getcomments', {    
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    contentid: value
+  })
+})
+.then(response => (response.json())
+
+)
+.then(data => {
+  let length = data.length;
+  document.getElementById("com_heading").innerText = `${length} comments`
+  for(let item of data) {
+  container.innerHTML += `<p><b>${item.DisplayName}:</b> ${item.Comment}</p>`;
+  }
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+}
+
+function signOut() {
+  localStorage.clear();
+  document.getElementById("top-menu").style.opacity = 0;
+  getSigninStatus();
+}
+
+async function handlePost() {
+  //event.preventDefault(); // stop form from reloading the page
+  const commenttext = document.getElementById("comment").value;
+  const preloader = document.getElementById("loading2");
+  const token = localStorage.getItem("loginToken");
+  preloader.style.display = "flex";
+
+  try {
+    //const res = await fetch("http://localhost:3000/files/postcomment", {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/postcomment", {      
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ contid: value, comment: commenttext })
+    });
+
+    if (res.status === 200) {
+      document.getElementById("comment").value = ``;
+      fetchComments();
+    } else {
+      errorMsg.textContent = "Server error, try again later.";
+    }
+  } catch (err) {
+    console.error("Error in comment posting:", err);
+    errorMsg.textContent = "Network error.";
+  }
+  preloader.style.display = "none";
+}
+
+async function fetchLikes() {
+
+  const like = document.getElementById("likes");
+
+  //fetch('http://localhost:3000/files/getlikes', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getlikes', {    
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contentid: value
+  })
+})
+.then(response => (response.json())
+
+)
+.then(data => {
+like.innerText = data[0].likes;
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+}
+
+async function fetchDislikes() {
+
+  const dislike = document.getElementById("dislikes");
+
+  //fetch('http://localhost:3000/files/getdislikes', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getdislikes', {    
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contentid: value
+  })
+})
+.then(response => (response.json())
+
+)
+.then(data => {
+dislike.innerText = data[0].dislikes;
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+}
+
+async function fetchUserReaction() {
+
+  const like_btn = document.getElementById("like_btn");
+  const dislike_btn = document.getElementById("dislike_btn");
+  const token = localStorage.getItem("loginToken");
+
+  like_btn.className = "react-btn like-black";
+  dislike_btn.className = "react-btn dislike-black";
+
+
+  if(token !== null) {
+
+  //fetch('http://localhost:3000/files/getuserreaction', {
+  fetch('https://i-press-backend-production.up.railway.app/files/getuserreaction', {    
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    "Authorization": `Bearer ${token}`
+  },
+  body: JSON.stringify({
+    contentid: value
+  })
+})
+.then(response => (response.json())
+
+)
+.then(data => {
+if(data.length > 0) {
+UserReaction = data[0].reaction;
+if(UserReaction === "like") { like_btn.className = "react-btn like-blue"; }
+else if(UserReaction === "dislike") { dislike_btn.className = "react-btn dislike-blue"; }
+}
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+  }
+  else {
+    UserReaction = "";
+    like_btn.className = "react-btn like-black";
+    dislike_btn.className = "react-btn dislike-black";
+  }
+
+}
+
+window.onclick = function(event) {
+  const profile_area = document.getElementById("profile");
+  profile_btn = document.getElementById("profile_btn");
+  topmenu = document.getElementById("top-menu");
+  const menu_btn = document.getElementById("menu-btn");
+  const side_nav = document.getElementById("side-nav");
+  const post_btn = document.getElementById("post_btn");
+
+  if(menu_btn && event.target === menu_btn) {
+//    if(side_nav.style.display === "none") side_nav.style.display = "block"; else side_nav.style.display = "none";
+side_nav.classList.toggle("active");
+  }
+  else if (post_btn && event.target === post_btn) {
+    handlePost();
+  }
+  else if (event.target === profile_area || event.target === profile_btn ) {
+    topmenu.style.opacity = 1;
+  }
+  else if(topmenu.style.opacity == 1) {
+    topmenu.style.opacity = 0;
+  }
+};
+
+window.addEventListener("storage", function (event) {
+  document.getElementById("top-menu").style.opacity = 0;  
+getSigninStatus();
+});
+
+function highlightButton(e) {
+  if(localStorage.getItem("loginToken") !== null) {
+    e.target.style.backgroundColor = "#e0e1e3";
+  }
+}
+
+function normalizeButton(e) {
+  e.target.style.backgroundColor = "#ffffff";
+}
+
+async function handleLike() {
+  var op = "";
+  const preloader = document.getElementById("loading1");
+  const token = localStorage.getItem("loginToken");
+
+    if(token !== null) {
+    preloader.style.display = "flex";
+
+      if(UserReaction === ""){
+        op = "add";
+      }
+      else if(UserReaction === "like") {
+        op = "delete";
+        UserReaction = "";
+      }
+
+      if(op === "add" || op === "delete") {
+
+    //const res = await fetch("http://localhost:3000/files/adddeletereaction", {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/adddeletereaction", {      
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ contentid: value, reaction: "like", operation: op })
+    });
+
+    if (res.status === 200) {
+      fetchUserReaction();
+      fetchLikes();
+
+    } else {
+      errorMsg.textContent = "Server error, try again later.";
+    }
+  }
+      preloader.style.display = "none";
+    }
+}
+
+async function handleDislike() {
+  var op = "";
+  const preloader = document.getElementById("loading1");
+  const token = localStorage.getItem("loginToken");
+
+    if(token !== null) {
+    preloader.style.display = "flex";    
+
+      if(UserReaction === ""){
+        op = "add";
+      }
+      else if(UserReaction === "dislike") {
+        op = "delete";
+        UserReaction = "";
+      }
+
+      if(op === "add" || op === "delete") {
+
+    //const res = await fetch("http://localhost:3000/files/adddeletereaction", {
+    const res = await fetch("https://i-press-backend-production.up.railway.app/files/adddeletereaction", {      
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ contentid: value, reaction: "dislike", operation: op })
+    });
+
+    if (res.status === 200) {
+      fetchUserReaction();
+      fetchDislikes();
+
+    } else {
+      errorMsg.textContent = "Server error, try again later.";
+    }
+  }
+    preloader.style.display = "none";
+    }
+}
+
+window.addEventListener("DOMContentLoaded", loadContent);
+document.body.style.overflow = '';
+logout.addEventListener("click", signOut);
+share_btn.addEventListener("click", goShare);
+like_btn.addEventListener("mouseenter", highlightButton);
+like_btn.addEventListener("mouseleave", normalizeButton);
+like_btn.addEventListener("click", handleLike);
+dislike_btn.addEventListener("mouseenter", highlightButton);
+dislike_btn.addEventListener("mouseleave", normalizeButton);
+dislike_btn.addEventListener("click", handleDislike);

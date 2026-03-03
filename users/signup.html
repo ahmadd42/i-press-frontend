@@ -28,122 +28,110 @@
   <link rel="stylesheet" href="../styling/signup-page.css">
   <link rel="stylesheet" href="../styling/modal-window.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
-    <link rel="icon" type="image/png" href="../graphics/favicon.png">
+  <link rel="icon" type="image/png" href="../graphics/favicon.png">
+  <script src="../assets/signup.min.js" defer></script>
   <title>goPress - New user signup</title>
 </head>
 <body>
 
-<div id="container"></div>  
+<div id="container">
 
-  <script>
+      <div class="nav-bar">
+      <div class="nav-bar-top"><button class="menu-btn nav-menu"></button></div>
+      <div class="navbar-item-container">
+      <div class="nav-bar-item"><button class="nav-btn nav-home"></button></div>
+      <div class="nav-bar-caption">Home</div>
+      </div>
+      <div class="navbar-item-container">
+      <div class="nav-bar-item"><button class="nav-btn nav-trending"></button></div>
+      <div class="nav-bar-caption">Trending</div>
+      </div>
+      <div class="navbar-item-container">
+      <div class="nav-bar-item"><button class="nav-btn nav-follows"></button></div>
+      <div class="nav-bar-caption">Followings</div>
+      </div>
+      <div class="navbar-item-container">
+      <div class="nav-bar-item"><button class="nav-btn nav-pub"></button></div>
+      <div class="nav-bar-caption">Publications</div>
+      </div>
+    </div>
 
-function loadTemplate() {    
-const con = document.getElementById("container");
+    <div class="top-bar-signup">
 
-let template = (window.innerWidth < 1000)
-        ? "small-signup.html"
-        : "big-signup.html";
-if(window.innerWidth < 800) {        
+        <div class="tool-bar">
+        <div class="main-logo bg-img-setting"></div>
+        <div class="search-box">
+          <input type="text" placeholder="Search..." />
+          <button type="submit"></button>
+        </div>
+        <div class="voice-search"><button></button></div>
+        <div><button id="share_btn" class="publish-btn">Share</button></div>
+        <div id="profile"></div>
+        </div>
+      
+        </div>
 
-    fetch("small-signup.html")
-        .then(res => res.text())
-        .then(html => {
-            con.innerHTML = html;   // Template is now in place
-        });
-      }
+        <div>
 
-else {
-      fetch("big-signup.html")
-        .then(res => res.text())
-        .then(html => {
-            con.innerHTML = html;   // Template is now in place
-        });
-}
-}
-/*    const modal = document.getElementById("successModal");
-    const login = document.getElementById('login_btn');
-    const home = document.getElementById('home_btn');
-    const form = document.getElementById("signup_form");
-    const congrats = document.getElementById("congrats");
+<form class="signup-form" id="signup_form" tabindex="0">
 
-    form.addEventListener('submit', handleSignup);*/
+    <h2>Create your account with us</h2>
 
-    function loginClicked() {
-      window.location.href = "login.html";
-    }
+    <div style="display: flex;">
 
-    function homeClicked() {
-      window.location.href = "/";
-    }
- 
-  function togglePwdView() {
-      var pwd = document.getElementById("password");
-      var pwd_t = document.getElementById("pwd-toggle");
+ <div class="labels1">
+    <label for="firstName">First Name:</label>
+    <label for="country">Country:</label>
+    <label for="email">Email Address:</label>
+    <label for="displayName">Display Name: <span class="explanation">(This is the name that will appear on your comments)</span></label>
+    <label for="password">Password:</label>        
+ </div>           
 
-  if (pwd.type === "password") {
-    pwd.type = "text";
-    pwd_t.className = "fa fa-eye-slash";
-  } else {
-    pwd.type = "password";
-    pwd_t.className = "fa fa-eye";
-  }      
-    }
+ <div class="inputs1">
+    <input type="text" id="firstName" name="firstName" tabindex="1" required>
+    <select id="country" name="country" tabindex="3" required>
+      <option value="">-- Select Country --</option>
+      <option value="US">United States</option>
+      <option value="UK">United Kingdom</option>
+      <option value="CA">Canada</option>
+      <option value="AU">Australia</option>
+      <option value="PK">Pakistan</option>
+      <option value="IN">India</option>
+      <option value="DE">Germany</option>
+      <option value="FR">France</option>
+      <option value="JP">Japan</option>
+      <option value="CN">China</option>
+      <option value="BR">Brazil</option>
+      <option value="ZA">South Africa</option>
+      <option value="Other">Other</option>
+    </select>    
 
+    <input type="email" id="email" name="email" tabindex="4" required>
+    <input type="text" id="displayName" name="displayName" tabindex="5" required>
+    <div class="password-container">
+    <input type="password" id="password" name="password" style="margin-top: 2.6em;" tabindex="6" required minlength="8">  
+    <span class="password-toggle" id="togglePassword"><i id="pwd-toggle" class="fa fa-eye"></i></span>
+    </div>
+    <button id="signup_btn" type="submit" tabindex="7">Sign Up</button>
+ </div>
 
-async function handleSignup(event) {
+ <div class="labels2">
+    <label for="lastName">Last Name:</label>
+ </div>
 
-  event.preventDefault(); // stop form from reloading the page
-  document.getElementById("err-msg").innerText = "";
+ <div class="inputs2">
+    <input type="text" id="lastName" name="lastName" tabindex="2" required>
+    <p id="err-msg" class="error"></p>
+ </div>
 
-  const btn = document.getElementById("signup_btn");
-  const email = document.getElementById("email").value;
-  const country = document.getElementById("country").value;
-  const firstName = document.getElementById("firstName").value;
-  const lastName = document.getElementById("lastName").value;
-  const displayName = document.getElementById("displayName").value;
-  const password = document.getElementById("password").value;
+ </div>
 
-  btn.textContent = ". . . . . .";
-  btn.disabled = true;
+</form>
 
-  const userData = {
-    email: email,
-    country: country,
-    f_name: firstName,
-    l_name: lastName,
-    disp_name: displayName,
-    pwd: password,
-  };
+</div>
 
-  try {
-    const res = await fetch("https://i-press-backend-production.up.railway.app/files/adduser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(userData)
-    });
-
-    if (res.status === 409) {
-      document.getElementById("err-msg").innerText = "This email address is already registered";
-      btn.textContent = "Sign up";
-      btn.disabled = false;
-    }
-    else if (res.status === 200) {
-      localStorage.setItem("email", email);
-      localStorage.setItem("fname", firstName);
-      localStorage.setItem("op", "activate");
-      window.location.href = "verify-email.html";
-    }
-  } catch (err) {
-    console.error("Login error:", err);
-    //errorMsg.textContent = "Network error.";
-  }
-}
-
-window.addEventListener("DOMContentLoaded", loadTemplate);
-
-  </script>
+    <div class="ads-panel"></div>
+</div>  
 
 </body>
 </html>    
