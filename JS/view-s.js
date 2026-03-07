@@ -147,11 +147,11 @@ async function fetchDocument() {
 )
 .then(data => {
 //document.getElementById("doc-panel").innerHTML = data[0].ext + "    " + data[0].can_download;
-const extension = data[0].ext;
-const dld_status = data[0].can_download;
-const uploader = data[0].uploader;
+const extension = data[0].extension;
+const dld_status = data[0].downloadable;
+const uploader = data[0].display_name;
 const title = data[0].title;
-const des = data[0].Description;
+const des = data[0].descr;
 const isTruncated = des.length > 300;
 const shortText = des.slice(0, 300);
 //const docURL = `http://localhost:3000/files/getContent/${value}${extension}/${screen}`;
@@ -217,7 +217,7 @@ async function fetchComments() {
   let length = data.length;
   document.getElementById("com_heading").innerText = `${length} comments`
   for(let item of data) {
-  container.innerHTML += `<p><b>${item.DisplayName}:</b> ${item.Comment}</p>`;
+  container.innerHTML += `<p><b>${item.display_name}:</b> ${item.comment}</p>`;
   }
 })
 .catch(error => {

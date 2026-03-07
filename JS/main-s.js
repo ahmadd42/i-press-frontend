@@ -1,6 +1,9 @@
 const screen = (window.innerWidth < 1000) ? "small" : "big";
 const logout = document.getElementById("logout");
 const share_btn = document.getElementById("share_btn");
+const container = document.getElementById('doc-panel');
+const search_box = document.getElementById("search_box");
+const search_btn = document.getElementById("search_btn");
 
 
 function getElapsedTime(GivenDatetime) {
@@ -47,8 +50,9 @@ function goShare() {
       window.location.href = "users/share.html";
   }
 }
+
 async function fetchFeeds() {
-  const container = document.getElementById('doc-panel');
+  
   try {
 //    const response = await fetch("http://192.168.100.99:3000/files/getfeeds", {      
     const response = await fetch("https://i-press-backend-production.up.railway.app/files/getfeeds", {      
@@ -61,54 +65,96 @@ async function fetchFeeds() {
       }
 
   const data = await response.json(); // JSONPlaceholder returns an array
+  renderContentFeeds(data);
     
-  for(let record of data) {
-    const elapsedTime = getElapsedTime(record.SharedOn);
-    const isTruncated = record.Description.length > 150;
-    const shortText = record.Description.slice(0, 150);
+  }
+catch (error) {
+        //alert(error);
+        console.log("Error fetching data:", error);
+        document.getElementById("doc-panel").innerHTML = "<div class=\"error-div\">Couldn't fetch your feeds</div>";
+        }        
+    }
+
+async function handleSearch() {
+
+  if(search_box.value != "") {
+    container.innerHTML = "";
+
+  try {
+//    const response = await fetch("http://192.168.100.99:3000/files/getfeeds", {      
+    const response = await fetch("https://i-press-backend-production.up.railway.app/files/searchkeyword", {      
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+      },
+    body: JSON.stringify({keyword: search_box.value})
+      });
+
+      if(response.status === 400) { /// If keyword search returned nothing, fetch the regular feeds
+        fetchFeeds();
+      }
+      else {
+      const data = await response.json(); // JSONPlaceholder returns an array
+      renderContentFeeds(data);  
+      }
+  }
+catch (error) {
+        //alert(error);
+        console.log("Error fetching data:", error);
+        document.getElementById("doc-panel").innerHTML = `<div class=\"error-div\">Couldn't fetch your feeds. ${error}</div>`;
+        }        
+      }
+    }
+
+function renderContentFeeds(feedsData) {
+
+  for(let record of feedsData) {
+    const elapsedTime = getElapsedTime(record.shared_on);
+    const isTruncated = record.descr.length > 150;
+    const shortText = record.descr.slice(0, 150);
     //const conURL = `http://192.168.100.99:3000/files/getContent/${record.ContentID}${record.Extension}/${screen}`
     //const conURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}${record.Extension}/${screen}`;
-    const conURL = `https://preview.gopress.online/preview/${record.ContentID}${record.Extension}`;
+    const conURL = `https://preview.gopress.online/preview/${record.content_id}${record.extension}`;
 
   const div = document.createElement('div');
   div.className = (screen === "big") ? 'doc-item' : 'doc-item-mobile';
   var HTMLString = '';
 
-          if(record.Extension === ".pdf") {
+          if(record.extension === ".pdf") {
           //let prevURL = `http://192.168.100.99:3000/files/getContent/${record.ContentID}.jpg/${screen}`;
           //let prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}.jpg/${screen}`;
-          let prevURL = `https://preview.gopress.online/preview/${record.ContentID}.jpg`;
+          let prevURL = `https://preview.gopress.online/preview/${record.content_id}.jpg`;
 
           HTMLString += (screen === "big") 
                         ? `<div class="doc-img"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon bg-img-setting" style="background-image: url('${prevURL}');"></div>` 
                         : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">PDF Document</p></div><div class="content-icon-mobile bg-img-setting" style="background-image: url('${prevURL}');"></div>`;
         }
-          else if(record.Extension === ".jpg" || record.Extension === ".jpeg" || record.Extension === ".gif" || record.Extension === ".png" || record.Extension === ".tiff") {
+          else if(record.extension === ".jpg" || record.extension === ".jpeg" || record.extension === ".gif" || record.extension === ".png" || record.extension === ".tiff") {
                 HTMLString += (screen === "big") 
                               ? `<div class="doc-img"><div class="username"><p class="grid-text uploader">Image</p></div><div class="content-icon bg-img-setting" style="background-image: url('${conURL}');"></div>` 
                               : `<div class="doc-img-mobile"><div class="username"><p class="grid-text uploader">Image</p></div><div class="content-icon-mobile bg-img-setting" style="background-image: url('${conURL}');"></div>`;
           }
-          else if(record.Extension === ".mp3" || record.Extension === ".mp4" || record.Extension === ".mpeg") {
+          else if(record.extension === ".mp3" || record.extension === ".mp4" || record.extension === ".mpeg") {
             //const prevURL = `http://192.168.100.99:3000/files/getContent/${record.ContentID}${record.Extension}/${screen}`;
-            const prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.ContentID}${record.Extension}/${screen}`;
+            const prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.content_id}${record.extension}/${screen}`;
 
             HTMLString += (screen === "big")
                           ? `<div class="video-prev-container"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><div class="video-prev"><video class="inline-video" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video></div>`
                           : `<div class="video-prev-container-mobile"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><div class="video-prev-mobile"><video class="inline-video" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video></div>`;  
           }
-          HTMLString += `<div class="username"><p class="grid-text uploader">${record.UserID}</p></div></div>`;
+          HTMLString += `<div class="username"><p class="grid-text uploader">${record.user_id}</p></div></div>`;
 
-        if(record.Extension === ".mp3" || record.Extension === ".mp4" || record.Extension === ".mpeg") {        
+        if(record.extension === ".mp3" || record.extension === ".mp4" || record.extension === ".mpeg") {        
           HTMLString += `<div class="video-desc">`;
           }
           else {
           HTMLString += `<div class="doc-desc">`;
           }
-          HTMLString += `<div><a href="view/index-s.html?id=${record.ContentID}"><p class="grid-text title"><b>${record.DocumentTitle}</b></p></a></div>
+          HTMLString += `<div><a href="view?id=${record.content_id}"><p class="grid-text title"><b>${record.title}</b></p></a></div>
             <div><span class="descr">
-            ${isTruncated ? shortText + '...' : record.Description}
+            ${isTruncated ? shortText + '...' : record.descr}
               </span></div>
-          <div><p class="grid-text"><b>Author: </b>${record.Author}</p></div>
+          <div><p class="grid-text"><b>Author: </b>${record.author}</p></div>
           <div><p class="grid-text"><b>Shared: </b>${elapsedTime}</p></div>
         </div>`
 
@@ -141,14 +187,7 @@ previewVideo.parentElement.addEventListener("mouseleave", () => {
   container.appendChild(div);
 
     }
-  }
-catch (error) {
-        //alert(error);
-        console.log("Error fetching data:", error);
-        document.getElementById("doc-panel").innerHTML = "<div class=\"error-div\">Couldn't fetch your feeds</div>";
-        }        
-    }
-
+}    
 
 function getSigninStatus() {
   const profile_area = document.getElementById("profile");
@@ -206,3 +245,9 @@ getSigninStatus();
 window.addEventListener("DOMContentLoaded", loadFeeds);
 logout.addEventListener("click", signOut);
 share_btn.addEventListener("click", goShare);
+search_btn.addEventListener("click", handleSearch);
+search_box.addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    handleSearch();
+  }
+});
