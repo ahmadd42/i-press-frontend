@@ -1,4 +1,4 @@
-  if(!localStorage.getItem("userId"))  
+  if(!localStorage.getItem("loginToken"))  
     window.location.href = "/";
   else if(window.innerWidth >= 800) 
     window.location.href = "share.html";
@@ -86,7 +86,7 @@ if(title.value === "" || desc.value === "" || author.value === "") {
     });
 
     if (res.status === 200) {
-      document.getElementById("link").innerText = "/view?id=" + conID;
+      document.getElementById("link").innerText = "https://gopress.online/view?id=" + conID;
       document.getElementById("success_msg").classList.add("active");
       conID = "";
       file_ext = "";

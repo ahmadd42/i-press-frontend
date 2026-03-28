@@ -135,7 +135,7 @@ function renderContentFeeds(feedsData) {
           }
           else if(record.extension === ".mp3" || record.extension === ".mp4" || record.extension === ".mpeg") {
             //const prevURL = `http://192.168.100.99:3000/files/getContent/${record.ContentID}${record.Extension}/${screen}`;
-            const prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.content_id}${record.extension}/${screen}`;
+            const prevURL = `https://content.gopress.online/content/${record.content_id}${record.extension}`;
 
             HTMLString += (screen === "big")
                           ? `<div class="video-prev-container"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><div class="video-prev"><video class="inline-video" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video></div>`

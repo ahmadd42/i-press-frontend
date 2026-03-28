@@ -3,6 +3,11 @@
   const share_btn = document.getElementById("share_btn");
   const like_btn = document.getElementById("like_btn");
   const dislike_btn = document.getElementById("dislike_btn");
+  const params = new URLSearchParams(window.location.search);
+  const value = params.get("id"); // replace with actual param name
+  var basicInfo;
+  var UserReaction = "";
+
 
 function getElapsedTime(GivenDatetime) {
 
@@ -34,7 +39,7 @@ return msg;
 function loadContent() {
 
   if(screen === "small") {
-    window.location.href = "index-s.html";
+    window.location.href = "index-s.html?id=" + value;
   }
 
   getSigninStatus();
@@ -43,11 +48,6 @@ function loadContent() {
   fetchLikes();
   fetchDislikes();
 }
-
-const params = new URLSearchParams(window.location.search);
-const value = params.get("id"); // replace with actual param name
-var basicInfo;
-var UserReaction = "";
 
 //document.getElementById("home_btn").onclick = () => {
 //window.location.href = "/i-press";
@@ -153,10 +153,8 @@ const des = data[0].descr;
 const isTruncated = des.length > 300;
 const shortText = des.slice(0, 300);
 //const docURL = `http://localhost:3000/files/getContent/${value}${extension}/${screen}`;
-if(extension === ".jpg" || extension === ".jpeg" || extension === ".gif" || extension === ".png" || extension === ".tiff") 
-  docURL = `https://preview.gopress.online/preview/${value}${extension}`;
-else  
-  docURL = `https://i-press-backend-production.up.railway.app/files/getContent/${value}${extension}/${screen}`;
+
+docURL = `https://content.gopress.online/content/${value}${extension}`;
 
 document.getElementById("doc-view-panel").innerHTML = generateViewerHTML(docURL, extension, dld_status);
 document.getElementById("con_title").innerText = title;

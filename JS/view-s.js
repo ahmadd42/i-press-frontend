@@ -3,6 +3,11 @@
   const share_btn = document.getElementById("share_btn");
   const like_btn = document.getElementById("like_btn");
   const dislike_btn = document.getElementById("dislike_btn");
+  const params = new URLSearchParams(window.location.search);
+  const value = params.get("id"); // replace with actual param name
+  var basicInfo;
+  var UserReaction = "";
+
 
 function getElapsedTime(GivenDatetime) {
 
@@ -34,7 +39,7 @@ return msg;
 function loadContent() {
 
   if(screen === "big") {
-    window.location.href = "index.html";
+    window.location.href = "index.html?id=" + value;
   }
 
   getSigninStatus();
@@ -43,13 +48,6 @@ function loadContent() {
   fetchLikes();
   fetchDislikes();
 }
-
-const params = new URLSearchParams(window.location.search);
-const value = params.get("id"); // replace with actual param name
-var basicInfo;
-var UserReaction = "";
-
-
 
 //document.getElementById("home_btn").onclick = () => {
 //window.location.href = "/i-press";
@@ -66,14 +64,14 @@ function goShare() {
 
 function getSigninStatus() {
   const profile_area = document.getElementById("profile");
-  const display_name = localStorage.getItem("displayName");
+  const disp_name = localStorage.getItem("displayName");
   const comm_panel = document.getElementById("comm_input");
 
-  if (display_name) {
+  if (disp_name) {
     profile_area.className = "me";
     profile_area.innerHTML = `<button id="profile_btn">Me</button>`;
-    document.getElementById("disp_name").innerHTML = display_name;
-    comm_panel.innerHTML = `<label id="who"><b>${display_name}:</b></label>
+    document.getElementById("disp_name").innerHTML = disp_name;
+    comm_panel.innerHTML = `<label id="who"><b>${disp_name}:</b></label>
         <textarea class="comment-box" id="comment" name="user_comments" rows="1" cols="30" placeholder="Add a public comment"></textarea>
         <button id="post_btn" class="post-btn">Post</button>`;  
   }
@@ -149,16 +147,13 @@ async function fetchDocument() {
 //document.getElementById("doc-panel").innerHTML = data[0].ext + "    " + data[0].can_download;
 const extension = data[0].extension;
 const dld_status = data[0].downloadable;
-const uploader = data[0].display_name;
+const uploader = data[0].disp_name;
 const title = data[0].title;
 const des = data[0].descr;
 const isTruncated = des.length > 300;
 const shortText = des.slice(0, 300);
 //const docURL = `http://localhost:3000/files/getContent/${value}${extension}/${screen}`;
-if(extension === ".jpg" || extension === ".jpeg" || extension === ".gif" || extension === ".png" || extension === ".tiff") 
-  docURL = `https://preview.gopress.online/preview/${value}${extension}`;
-else  
-  docURL = `https://i-press-backend-production.up.railway.app/files/getContent/${value}${extension}/${screen}`;
+docURL = `https://content.gopress.online/content/${value}${extension}`;
 
 document.getElementById("doc-view-panel").innerHTML = generateViewerHTML(docURL, extension, dld_status);
 document.getElementById("con_title").innerText = title;
@@ -217,7 +212,7 @@ async function fetchComments() {
   let length = data.length;
   document.getElementById("com_heading").innerText = `${length} comments`
   for(let item of data) {
-  container.innerHTML += `<p><b>${item.display_name}:</b> ${item.comment}</p>`;
+  container.innerHTML += `<p><b>${item.disp_name}:</b> ${item.comment}</p>`;
   }
 })
 .catch(error => {

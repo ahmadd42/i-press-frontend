@@ -136,7 +136,7 @@ function renderContentFeeds(feedsData) {
           }
           else if(record.extension === ".mp3" || record.extension === ".mp4" || record.extension === ".mpeg") {
             //const prevURL = `http://192.168.100.99:3000/files/getContent/${record.ContentID}${record.Extension}/${screen}`;
-            const prevURL = `https://i-press-backend-production.up.railway.app/files/getContent/${record.content_id}${record.extension}/${screen}`;
+            const prevURL = `https://content.gopress.online/content/${record.content_id}${record.extension}`;
 
             HTMLString += (screen === "big")
                           ? `<div class="video-prev-container"><div class="username"><p class="grid-text uploader">MP4 Video</p></div><div class="video-prev"><video class="inline-video" playbackRate=1.4 loop muted playsinline preload="metadata" oncontextmenu="return false"><source src="${prevURL}" type="video/mp4"></video></div>`
@@ -150,7 +150,7 @@ function renderContentFeeds(feedsData) {
           else {
           HTMLString += `<div class="doc-desc">`;
           }
-          HTMLString += `<div><a href="view?id=${record.content_id}"><p class="grid-text title"><b>${record.title}</b></p></a></div>
+          HTMLString += `<div><a href="view/index-s.html?id=${record.content_id}"><p class="grid-text title"><b>${record.title}</b></p></a></div>
             <div><span class="descr">
             ${isTruncated ? shortText + '...' : record.descr}
               </span></div>
@@ -246,8 +246,3 @@ window.addEventListener("DOMContentLoaded", loadFeeds);
 logout.addEventListener("click", signOut);
 share_btn.addEventListener("click", goShare);
 search_btn.addEventListener("click", handleSearch);
-search_box.addEventListener("keydown", function(e) {
-  if (e.key === "Enter") {
-    handleSearch();
-  }
-});
